@@ -22,6 +22,8 @@ public class PrintUser {
     @Column(nullable = false)
     private String password;
 
+    private String email;
+
     @OneToMany
     private List<PrintOrder> orders;
 }
