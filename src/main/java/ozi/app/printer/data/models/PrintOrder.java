@@ -18,6 +18,8 @@ public class PrintOrder {
 
     private int quantity;
 
+    private LocalDateTime orderDate;
+
     private LocalDateTime deliveryDate;
 
     private boolean hasOrdered= true;
