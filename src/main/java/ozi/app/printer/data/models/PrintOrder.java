@@ -1,10 +1,13 @@
 package ozi.app.printer.data.models;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
+@Data
 public class PrintOrder {
     @Id
     private String id;
@@ -17,7 +20,7 @@ public class PrintOrder {
 
     private LocalDateTime deliveryDate;
 
-    private boolean hasOrdered;
+    private boolean hasOrdered= true;
 
     private OrderStatus orderStatus;
 }
