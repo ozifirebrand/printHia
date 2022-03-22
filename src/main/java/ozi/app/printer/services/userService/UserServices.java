@@ -11,10 +11,10 @@ import java.util.Optional;
 
 public interface UserServices {
     UserCreationResponse createUser(UserCreationRequest request) throws BusinessLogic;
-    Optional<PrintUser> getUserById(String id);
-    Optional<PrintUser> getUserByEmail(String email);
-    Optional<PrintUser> getUserByUsernameAndPassword(String username, String password);
-    Optional<PrintUser> getUserByNamesAndPassword(String firstName, String lastName, String password);
+    PrintUser getUserById(String id) throws BusinessLogic;
+    PrintUser getUserByEmail(String email);
+    PrintUser getUserByUsernameAndPassword(String username, String password);
+    PrintUser getUserByNamesAndPassword(String firstName, String lastName, String password);
     List<PrintUser> getAllUsers();
     UserCreationResponse updateUser(UserCreationRequest request);
     boolean deleteUserById(String id);

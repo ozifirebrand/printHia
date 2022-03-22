@@ -8,6 +8,7 @@ import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.repositories.UserRepository;
 import ozi.app.printer.exceptions.BusinessLogic;
+import ozi.app.printer.mapper.Mapper;
 import ozi.app.printer.services.userService.UserServices;
 
 import java.util.List;
@@ -20,36 +21,47 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public UserCreationResponse createUser(UserCreationRequest request) throws BusinessLogic {
-        if ( request.getEmail() == null || request.getUsername() == null|| request.getFirstName() == null|| request.getLastName() == null || request.getPassword() == null ){
+        validateRequestDetails(request);
+
+        PrintUser user = Mapper.map(request);
+        PrintUser savedUser = userRepository.save(user);
+        return Mapper.map(savedUser);
+    }
+
+    private void validateRequestDetails(UserCreationRequest request) throws BusinessLogic {
+        boolean emailIsEmpty= request.getEmail() == null;
+        boolean usernameIsEmpty= request.getUsername() == null;
+        boolean firstNameIsEmpty = request.getFirstName() == null;
+        boolean lastNameIsEmpty = request.getLastName() == null;
+        boolean passwordIsEmpty = request.getPassword() == null;
+
+        if ( emailIsEmpty || usernameIsEmpty|| firstNameIsEmpty|| lastNameIsEmpty|| passwordIsEmpty ){
             throw new BusinessLogic("Incomplete details");
         }
-
-        UserCreationResponse response = new UserCreationResponse();
-        response.setFirstName(request.getFirstName());
-        response.setUsername(response.getUsername());
-        response.setLastName(request.getLastName());
-        response.setEmail(request.getEmail());
-        return response;
     }
 
     @Override
-    public Optional<PrintUser> getUserById(String id) {
-        return Optional.empty();
+    public PrintUser getUserById(String id) throws BusinessLogic {
+        Optional<PrintUser> optionalPrintUser = userRepository.findById(id);
+        if ( optionalPrintUser.isEmpty() ){
+            throw new BusinessLogic("This user does not exist!");
+        }
+        return optionalPrintUser.get();
     }
 
     @Override
-    public Optional<PrintUser> getUserByEmail(String email) {
-        return Optional.empty();
+    public PrintUser getUserByEmail(String email) {
+        return null;
     }
 
     @Override
-    public Optional<PrintUser> getUserByUsernameAndPassword(String username, String password) {
-        return Optional.empty();
+    public PrintUser getUserByUsernameAndPassword(String username, String password) {
+        return null;
     }
 
     @Override
-    public Optional<PrintUser> getUserByNamesAndPassword(String firstName, String lastName, String password) {
-        return Optional.empty();
+    public PrintUser getUserByNamesAndPassword(String firstName, String lastName, String password) {
+        return null;
     }
 
     @Override
