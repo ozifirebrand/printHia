@@ -86,19 +86,34 @@ class UserServicesImplTest {
 
 
     @Test
-    void getUserById() {
+    void getUserById() throws BusinessLogic {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
         request.setFirstName("firstname");
         request.setLastName("lastname");
         request.setPassword("password");
-        PrintUser user = Mapper.map(request);
+        UserCreationResponse response = userServices.createUser(request);
+        //when
+        PrintUser user = userServices.getUserById(response.getId());
+        //assert
+        assertThat(user.getFirstName()).isEqualTo(response.getFirstName());
+        assertThat(user.getLastName()).isEqualTo(response.getLastName());
+        assertThat(user.getEmail()).isEqualTo(response.getEmail());
+        assertThat(user.getId()).isEqualTo(response.getId());
+    }
 
+    @Test
+    public void test_ifIdIsEmpty_FindById_ThrowsUserDoesNotExistErrorMessage() throws BusinessLogic {
+        //given no condition
+        //when
+        //assert
+        assertThatThrownBy(()->userServices.getUserById("just_any_value")).isInstanceOf(BusinessLogic.class).hasMessage("This user does not exist!");
     }
 
     @Test
     void getUserByEmail() {
+        //given
     }
 
     @Test
