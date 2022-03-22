@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class PrintUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     private String firstName;
