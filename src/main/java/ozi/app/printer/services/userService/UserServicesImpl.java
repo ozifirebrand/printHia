@@ -1,5 +1,6 @@
 package ozi.app.printer.services.userService;
 
+import com.fasterxml.jackson.core.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ozi.app.printer.data.dtos.requests.UserCreationRequest;
@@ -14,9 +15,16 @@ import java.util.List;
 public class UserServicesImpl implements UserServices {
     @Autowired
     private UserRepository userRepository;
+
     @Override
     public UserCreationResponse createUser(UserCreationRequest request) {
-        return null;
+
+        UserCreationResponse response = new UserCreationResponse();
+        response.setFirstName(request.getFirstName());
+        response.setUsername(response.getUsername());
+        response.setLastName(request.getLastName());
+        response.setEmail(request.getEmail());
+        return response;
     }
 
     @Override
