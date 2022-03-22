@@ -104,7 +104,7 @@ class UserServicesImplTest {
     }
 
     @Test
-    public void test_ifIdIsEmpty_FindById_ThrowsUserDoesNotExistErrorMessage() throws BusinessLogic {
+    public void test_ifIdIsEmpty_FindByIdThrows_UserDoesNotExistErrorMessage() throws BusinessLogic {
         //given no condition
         //when
         //assert
@@ -112,9 +112,41 @@ class UserServicesImplTest {
     }
 
     @Test
-    void getUserByEmail() {
+    void getUserByEmail() throws BusinessLogic {
         //given
+        request.setEmail("firstname@mail.com");
+        request.setUsername("username");
+        request.setFirstName("firstname");
+        request.setLastName("lastname");
+        request.setPassword("password");
+        UserCreationResponse response = userServices.createUser(request);
+
+        //when
+        PrintUser user = userServices.getUserByEmail(response.getEmail());
+
+        //assert
+
+        assertThat(user.getEmail()).isEqualTo(response.getEmail());
+        assertThat(user.getId()).isEqualTo(response.getId());
+        assertThat(user.getFirstName()).isEqualTo(response.getFirstName());
+        assertThat(user.getLastName()).isEqualTo(response.getLastName());
     }
+
+    @Test
+    public void test_ifEmailIsEmpty_FindByEmailThrows_UserWithEmailDoesNotExistErrorMessage() throws BusinessLogic {
+        //given no condition
+        //when
+        //assert
+        assertThatThrownBy(()->userServices
+                .getUserByEmail("invalidemail@mail.com"))
+                .isInstanceOf(BusinessLogic.class)
+                .hasMessage("This user with email \"invalidemail@mail.com\" does not exist!");
+    }
+
+
+                                    //todo TEST FOR INVALID EMAIL VALUE
+
+
 
     @Test
     void getUserByUsernameAndPassword() {
