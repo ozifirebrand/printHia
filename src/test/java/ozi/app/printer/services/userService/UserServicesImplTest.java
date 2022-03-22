@@ -9,7 +9,6 @@ import ozi.app.printer.data.dtos.requests.UserCreationRequest;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.exceptions.BusinessLogic;
-import ozi.app.printer.mapper.Mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,6 +28,7 @@ class UserServicesImplTest {
 
     @AfterEach
     void tearDown() {
+        userServices.deleteAllUsers();
     }
 
     @Test
@@ -144,20 +144,34 @@ class UserServicesImplTest {
     }
 
 
-                                    //todo TEST FOR INVALID EMAIL VALUE
+                                    //todo TEST FOR INVALID EMAIL VALUE - REGEX
 
 
 
     @Test
-    void getUserByUsernameAndPassword() {
-    }
+    void getAllUsers() throws BusinessLogic {
+        //given
+        request.setEmail("firstname@mail.com");
+        request.setUsername("username");
+        request.setFirstName("firstname");
+        request.setLastName("lastname");
+        request.setPassword("password");
 
-    @Test
-    void getUserByNamesAndPassword() {
-    }
+        UserCreationRequest request1 = new UserCreationRequest();
+        request1.setEmail("firstname1@mail.com");
+        request1.setUsername("username1");
+        request1.setFirstName("firstname1");
+        request1.setLastName("lastname1");
+        request1.setPassword("password1");
 
-    @Test
-    void getAllUsers() {
+
+        //when
+        UserCreationResponse response = userServices.createUser(request);
+        UserCreationResponse response1 = userServices.createUser(request1);
+
+        //assert
+        assertThat(userServices.getAllUsers().size()).isEqualTo(2);
+
     }
 
     @Test
@@ -165,18 +179,80 @@ class UserServicesImplTest {
     }
 
     @Test
-    void deleteUserById() {
+    void deleteUserById() throws BusinessLogic {
+        //given
+        request.setEmail("firstname@mail.com");
+        request.setUsername("username");
+        request.setFirstName("firstname");
+        request.setLastName("lastname");
+        request.setPassword("password");
+        UserCreationResponse response = userServices.createUser(request);
+
+        //when
+        boolean userIsDeleted = userServices.deleteUserById(response.getId());
+
+        //assert
+        assertThat(userIsDeleted).isTrue();
     }
 
     @Test
-    void deleteUserByEmail() {
+    void deleteUserByEmail() throws BusinessLogic {
+        //given
+        request.setEmail("firstname@mail.com");
+        request.setUsername("username");
+        request.setFirstName("firstname");
+        request.setLastName("lastname");
+        request.setPassword("password");
+        UserCreationResponse response = userServices.createUser(request);
+
+        //when
+        boolean userIsDeleted = userServices.deleteUserByEmail(response.getEmail());
+
+        //assert
+        assertThat(userIsDeleted).isTrue();
     }
 
     @Test
-    void deleteUserByUsername() {
+    void deleteUserByUsername() throws BusinessLogic {
+        //given
+        request.setEmail("firstname@mail.com");
+        request.setUsername("username");
+        request.setFirstName("firstname");
+        request.setLastName("lastname");
+        request.setPassword("password");
+        UserCreationResponse response = userServices.createUser(request);
+
+        //when
+        boolean userIsDeleted = userServices.deleteUserByUsername(response.getUsername());
+
+        //assert
+        assertThat(userIsDeleted).isTrue();
     }
 
     @Test
-    void deleteAllUsers() {
+    void deleteAllUsers() throws BusinessLogic {
+        //given
+        request.setEmail("firstname@mail.com");
+        request.setUsername("username");
+        request.setFirstName("firstname");
+        request.setLastName("lastname");
+        request.setPassword("password");
+        UserCreationRequest request1 = new UserCreationRequest();
+        request1.setEmail("firstname1@mail.com");
+        request1.setUsername("username1");
+        request1.setFirstName("firstname1");
+        request1.setLastName("lastname1");
+        request1.setPassword("password1");
+        //when
+        UserCreationResponse response = userServices.createUser(request);
+        UserCreationResponse response1 = userServices.createUser(request1);
+        //assert
+        assertThat(userServices.getAllUsers().size()).isEqualTo(2);
+
+        //when
+        userServices.deleteAllUsers();
+
+        //assert
+        assertThat(userServices.getAllUsers().size()).isEqualTo(0);
     }
 }
