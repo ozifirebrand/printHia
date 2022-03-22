@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserServices {
     UserCreationResponse createUser(UserCreationRequest request) throws BusinessLogic;
     PrintUser getUserById(String id) throws BusinessLogic;
-    PrintUser getUserByEmail(String email);
+    PrintUser getUserByEmail(String email) throws BusinessLogic;
     PrintUser getUserByUsernameAndPassword(String username, String password);
     PrintUser getUserByNamesAndPassword(String firstName, String lastName, String password);
     List<PrintUser> getAllUsers();

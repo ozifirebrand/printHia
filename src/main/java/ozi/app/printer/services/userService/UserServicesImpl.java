@@ -49,9 +49,14 @@ public class UserServicesImpl implements UserServices {
         return optionalPrintUser.get();
     }
 
+
     @Override
-    public PrintUser getUserByEmail(String email) {
-        return null;
+    public PrintUser getUserByEmail(String email) throws BusinessLogic {
+        Optional<PrintUser> optionalPrintUser = userRepository.findPrintUserByEmail(email);
+        if ( optionalPrintUser.isEmpty() ){
+            throw new BusinessLogic("This user with email \""+email +"\" does not exist!");
+        }
+        return optionalPrintUser.get();
     }
 
     @Override
