@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<PrintUser, String> {
     Optional<PrintUser> findPrintUserByEmail(String email);
+
+    void deletePrintUserByEmail(String email);
 }
