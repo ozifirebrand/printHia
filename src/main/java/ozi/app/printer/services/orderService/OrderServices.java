@@ -1,6 +1,5 @@
 package ozi.app.printer.services.orderService;
 
-import org.hibernate.criterion.Order;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
@@ -15,8 +14,8 @@ public interface OrderServices {
     OrderCreationResponse getOrderById(String id);
     boolean clearAllOrders();
     boolean deleteOrderById(String id);
-    List<Order> getAllOrders();
-    List<Order> getOrdersByUsername(String username);
-    List<Order> getOrdersByDate(LocalDateTime dateTime);
-    List<Order> getOrdersByStatus(OrderStatus status);
+    List<PrintOrder> getAllOrders();
+    List<PrintOrder> getOrdersByUsername(String username);
+    List<PrintOrder> getOrdersByDate(LocalDateTime dateTime);
+    List<PrintOrder> getOrdersByStatus(OrderStatus status);
 }
