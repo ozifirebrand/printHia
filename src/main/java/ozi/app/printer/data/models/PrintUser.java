@@ -21,9 +21,9 @@ public class PrintUser {
     @Column(unique = true)
     private String username;
 
-    @Column(nullable = false)
     private String password;
 
+    @Column(unique = true)
     private String email;
 
     @OneToMany
