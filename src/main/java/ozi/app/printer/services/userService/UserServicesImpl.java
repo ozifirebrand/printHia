@@ -12,6 +12,7 @@ import ozi.app.printer.mapper.Mapper;
 import ozi.app.printer.services.userService.UserServices;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -59,19 +60,10 @@ public class UserServicesImpl implements UserServices {
         return optionalPrintUser.get();
     }
 
-    @Override
-    public PrintUser getUserByUsernameAndPassword(String username, String password) {
-        return null;
-    }
-
-    @Override
-    public PrintUser getUserByNamesAndPassword(String firstName, String lastName, String password) {
-        return null;
-    }
 
     @Override
     public List<PrintUser> getAllUsers() {
-        return null;
+        return userRepository.findAll();
     }
 
     @Override
@@ -81,12 +73,15 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public boolean deleteUserById(String id) {
-        return false;
+        userRepository.deleteById(id);
+        return userRepository.findById(id).isEmpty();
     }
 
     @Override
     public boolean deleteUserByEmail(String email) {
-        return false;
+        userRepository.deletePrintUserByEmail(email);
+
+        return userRepository.findPrintUserByEmail(email).isEmpty();
     }
 
     @Override
@@ -96,6 +91,8 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public boolean deleteAllUsers() {
-        return false;
+        userRepository.deleteAll();
+
+        return userRepository.findAll().isEmpty();
     }
 }
