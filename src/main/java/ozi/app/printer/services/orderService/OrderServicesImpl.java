@@ -1,10 +1,10 @@
 package ozi.app.printer.services.orderService;
 
-import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
+import ozi.app.printer.data.models.PrintOrder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,22 +32,22 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public List<Order> getAllOrders() {
+    public List<PrintOrder> getAllOrders() {
         return null;
     }
 
     @Override
-    public List<Order> getOrdersByUsername(String username) {
+    public List<PrintOrder> getOrdersByUsername(String username) {
         return null;
     }
 
     @Override
-    public List<Order> getOrdersByDate(LocalDateTime dateTime) {
+    public List<PrintOrder> getOrdersByDate(LocalDateTime dateTime) {
         return null;
     }
 
     @Override
-    public List<Order> getOrdersByStatus(OrderStatus status) {
+    public List<PrintOrder> getOrdersByStatus(OrderStatus status) {
         return null;
     }
 }
