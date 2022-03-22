@@ -7,9 +7,11 @@ import ozi.app.printer.data.dtos.requests.UserCreationRequest;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.repositories.UserRepository;
+import ozi.app.printer.exceptions.BusinessLogic;
 import ozi.app.printer.services.userService.UserServices;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServicesImpl implements UserServices {
@@ -17,7 +19,10 @@ public class UserServicesImpl implements UserServices {
     private UserRepository userRepository;
 
     @Override
-    public UserCreationResponse createUser(UserCreationRequest request) {
+    public UserCreationResponse createUser(UserCreationRequest request) throws BusinessLogic {
+        if ( request.getEmail() == null || request.getUsername() == null|| request.getFirstName() == null|| request.getLastName() == null || request.getPassword() == null ){
+            throw new BusinessLogic("Incomplete details");
+        }
 
         UserCreationResponse response = new UserCreationResponse();
         response.setFirstName(request.getFirstName());
@@ -28,23 +33,23 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public UserCreationResponse getUserById(String id) {
-        return null;
+    public Optional<PrintUser> getUserById(String id) {
+        return Optional.empty();
     }
 
     @Override
-    public UserCreationResponse getUserByEmail(String email) {
-        return null;
+    public Optional<PrintUser> getUserByEmail(String email) {
+        return Optional.empty();
     }
 
     @Override
-    public UserCreationResponse getUserByUsernameAndPassword(String username, String password) {
-        return null;
+    public Optional<PrintUser> getUserByUsernameAndPassword(String username, String password) {
+        return Optional.empty();
     }
 
     @Override
-    public UserCreationResponse getUserByNamesAndPassword(String firstName, String lastName, String password) {
-        return null;
+    public Optional<PrintUser> getUserByNamesAndPassword(String firstName, String lastName, String password) {
+        return Optional.empty();
     }
 
     @Override
