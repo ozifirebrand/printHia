@@ -85,7 +85,6 @@ public class UserServicesImpl implements UserServices {
             throw new BusinessLogic("There are no users in here!");
         }
         userRepository.deleteAll();
-
         return userRepository.findAll().isEmpty();
     }
 }
