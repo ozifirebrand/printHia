@@ -34,7 +34,7 @@ class OrderServicesImplTest {
 
     @AfterEach
     void tearDown() throws OrderExceptions {
-        orderServices.clearAllOrders();
+//        orderServices.clearAllOrders();
     }
 
     @Test
@@ -94,36 +94,10 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void clearAllOrders() throws BusinessLogic {
-        //given
-        OrderCreationRequest request1 = new OrderCreationRequest();
-        request1.setOrderDate(LocalDateTime.now());
-        request1.setSize(12.5);
-        request1.setImageUrl("imageUrl");
-        request1.setQuantity(1);
-        OrderCreationResponse response = orderServices.createOrder(request);
-        OrderCreationResponse response1 = orderServices.createOrder(request1);
-
-        //when
-        orderServices.clearAllOrders();
-        //assert
-        assertThatThrownBy(()->orderServices
-                .getOrderById(response.getId()))
-                .isInstanceOf(OrderExceptions.class)
-                .hasMessage("This user with id " +response.getId()+" does not exist");
-
-        assertThatThrownBy(()->orderServices
-                .getOrderById(response1.getId()))
-                .isInstanceOf(OrderExceptions.class)
-                .hasMessage("This user with id " +response1.getId()+" does not exist");
-        assertThat(orderServices.clearAllOrders()).isTrue();
-    }
-
-    @Test
     public void testThrowNoOrdersError_WhenClearAll_OnEmptyDB(){
         //assert
         assertThatThrownBy(()->orderServices
-                .clearAllOrders()).isInstanceOf(OrderExceptions.class)
+                .getAllOrders()).isInstanceOf(OrderExceptions.class)
                 .hasMessage("There are no orders here!");
     }
 
@@ -167,22 +141,34 @@ class OrderServicesImplTest {
         request1.setSize(12.5);
         request1.setImageUrl("imageUrl");
         request1.setQuantity(1);
-        OrderCreationResponse response = orderServices.createOrder(request);
-        OrderCreationResponse response1 = orderServices.createOrder(request1);
+        orderServices.createOrder(request);
+        orderServices.createOrder(request1);
 
         //when
         List<PrintOrder> orders = orderServices.getAllOrders();
 
-        assertThat(orders.size()).isEqualTo(2);
+        assertThat(orders.size()).isEqualTo(3);
 
     }
 
-    @Test
-    public void getOrdersByUsername() {
-    }
 
     @Test
-    public void getOrdersByDate() {
+    public void getOrdersByDate() throws BusinessLogic {
+        //given
+        OrderCreationRequest request1 = new OrderCreationRequest();
+        request1.setOrderDate(LocalDateTime.now());
+        request1.setSize(12.5);
+        request1.setImageUrl("imageUrl");
+        request1.setQuantity(1);
+        orderServices.createOrder(request);
+        orderServices.createOrder(request1);
+        OrderCreationResponse response = orderServices.createOrder(request);
+        OrderCreationResponse response1 = orderServices.createOrder(request1);
+        //when
+        List<PrintOrder> orders = orderServices.getOrdersByDate(response.getOrderDate());
+
+        assertThat(orders.get(0).getOrderDate()).isEqualTo(response.getOrderDate());
+        assertThat(orders.get(1).getOrderDate()).isEqualTo(response1.getOrderDate());
     }
 
     @Test
