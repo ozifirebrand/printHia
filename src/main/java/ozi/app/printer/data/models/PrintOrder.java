@@ -27,7 +27,7 @@ public class PrintOrder {
 
     private LocalDateTime deliveryDate;
 
-    private boolean ordered= true;
+    private boolean ordered;
 
     private OrderStatus orderStatus;
 }
