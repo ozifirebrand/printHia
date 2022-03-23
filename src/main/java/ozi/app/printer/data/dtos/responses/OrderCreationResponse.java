@@ -5,6 +5,7 @@ import ozi.app.printer.data.models.OrderStatus;
 import java.time.LocalDateTime;
 @Data
 public class OrderCreationResponse {
+    private String id;
 
     private String imageUrl;
 
