@@ -16,7 +16,7 @@ public class OrderCreationResponse {
 
     private LocalDateTime deliveryDate;
 
-    private final boolean Ordered= true;
+    private final boolean ordered= true;
 
     private OrderStatus orderStatus;
 
