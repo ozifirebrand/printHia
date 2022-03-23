@@ -10,6 +10,7 @@ import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.data.repositories.OrderRepository;
 import ozi.app.printer.exceptions.BusinessLogic;
+import ozi.app.printer.exceptions.OrderExceptions;
 import ozi.app.printer.mapper.Mapper;
 
 import java.time.LocalDateTime;
@@ -25,15 +26,17 @@ public class OrderServicesImpl implements OrderServices {
     @Override
     public OrderCreationResponse createOrder(OrderCreationRequest request) throws BusinessLogic {
         validate(request);
-
         PrintOrder order = Mapper.map(request);
-
         order.setOrdered(true);
         order.setOrderStatus(OrderStatus.ORDERED);
-        PrintOrder savedOrder = orderRepository.save(order);
+        PrintOrder savedOrder = saveOrder(order);
         savedOrder.setDeliveryDate(savedOrder.getOrderDate().plusDays(3) );
-
         return Mapper.map(savedOrder);
+    }
+
+    private PrintOrder saveOrder( PrintOrder order) {
+
+        return orderRepository.save(order);
     }
 
     private void validate(OrderCreationRequest request) throws BusinessLogic {
@@ -48,23 +51,38 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public PrintOrder getOrderById(String id) {
-        return orderRepository.findById(id).orElse(null);
+    public PrintOrder getOrderById(String id) throws OrderExceptions {
+        Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(id);
+        if ( optionalPrintOrder.isEmpty() ){
+            throw new OrderExceptions("This user with id " +id+" does not exist");
+        }
+        return optionalPrintOrder.get();
     }
 
     @Override
-    public boolean clearAllOrders() {
-        return false;
+    public boolean clearAllOrders() throws OrderExceptions {
+        orderRepository.deleteAll();
+        if (getAllOrders().size()!=0 ) throw new OrderExceptions("There are no orders here!");
+        return getAllOrders().size()==0;
     }
 
     @Override
     public boolean deleteOrderById(String id) {
-        return false;
+        orderRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public OrderCreationResponse updateOrder(String id, OrderCreationRequest request) throws OrderExceptions {
+        PrintOrder order = getOrderById(id);
+        if ( order!= null )
+        saveOrder(order);
+        return null;
     }
 
     @Override
     public List<PrintOrder> getAllOrders() {
-        return null;
+        return orderRepository.findAll();
     }
 
     @Override
