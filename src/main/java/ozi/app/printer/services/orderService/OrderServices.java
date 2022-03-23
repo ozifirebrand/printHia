@@ -17,8 +17,7 @@ public interface OrderServices {
     boolean clearAllOrders() throws OrderExceptions;
     boolean deleteOrderById(String id);
     OrderCreationResponse updateOrder(String id, OrderCreationRequest request) throws OrderExceptions;
-    List<PrintOrder> getAllOrders();
-    List<PrintOrder> getOrdersByUsername(String username);
+    List<PrintOrder> getAllOrders() throws OrderExceptions;
     List<PrintOrder> getOrdersByDate(LocalDateTime dateTime);
     List<PrintOrder> getOrdersByStatus(OrderStatus status);
 }

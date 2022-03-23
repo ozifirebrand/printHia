@@ -61,8 +61,10 @@ public class OrderServicesImpl implements OrderServices {
 
     @Override
     public boolean clearAllOrders() throws OrderExceptions {
+//        if (orderRepository.findAll().size()==0 )
+//            throw new OrderExceptions("There are no orders here!");
+
         orderRepository.deleteAll();
-        if (getAllOrders().size()!=0 ) throw new OrderExceptions("There are no orders here!");
         return getAllOrders().size()==0;
     }
 
@@ -81,18 +83,14 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public List<PrintOrder> getAllOrders() {
+    public List<PrintOrder> getAllOrders() throws OrderExceptions {
+        if ( orderRepository.findAll().size() == 0 )throw new OrderExceptions("There are no orders here!");
         return orderRepository.findAll();
     }
 
     @Override
-    public List<PrintOrder> getOrdersByUsername(String username) {
-        return null;
-    }
-
-    @Override
     public List<PrintOrder> getOrdersByDate(LocalDateTime dateTime) {
-        return null;
+        return orderRepository.findPrintOrderByOrderDate(dateTime);
     }
 
     @Override
