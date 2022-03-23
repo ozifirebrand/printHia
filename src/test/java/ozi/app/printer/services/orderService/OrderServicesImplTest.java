@@ -13,6 +13,7 @@ import ozi.app.printer.exceptions.BusinessLogic;
 import ozi.app.printer.exceptions.OrderExceptions;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,7 +33,8 @@ class OrderServicesImplTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws OrderExceptions {
+        orderServices.clearAllOrders();
     }
 
     @Test
@@ -84,22 +86,95 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void test_ThrowUserDoesNotExistException_WhenUnknownId_FindById(){
+    public void test_ThrowOrderDoesNotExistException_WhenUnknownId_FindById(){
         //assert
         assertThatThrownBy(()->orderServices.getOrderById("an_invalid_id"))
                 .isInstanceOf(OrderExceptions.class)
                 .hasMessage("This user with id an_invalid_id does not exist");
     }
+
     @Test
-    public void clearAllOrders() {
+    public void clearAllOrders() throws BusinessLogic {
+        //given
+        OrderCreationRequest request1 = new OrderCreationRequest();
+        request1.setOrderDate(LocalDateTime.now());
+        request1.setSize(12.5);
+        request1.setImageUrl("imageUrl");
+        request1.setQuantity(1);
+        OrderCreationResponse response = orderServices.createOrder(request);
+        OrderCreationResponse response1 = orderServices.createOrder(request1);
+
+        //when
+        orderServices.clearAllOrders();
+        //assert
+        assertThatThrownBy(()->orderServices
+                .getOrderById(response.getId()))
+                .isInstanceOf(OrderExceptions.class)
+                .hasMessage("This user with id " +response.getId()+" does not exist");
+
+        assertThatThrownBy(()->orderServices
+                .getOrderById(response1.getId()))
+                .isInstanceOf(OrderExceptions.class)
+                .hasMessage("This user with id " +response1.getId()+" does not exist");
+        assertThat(orderServices.clearAllOrders()).isTrue();
     }
 
     @Test
-    public void deleteOrderById() {
+    public void testThrowNoOrdersError_WhenClearAll_OnEmptyDB(){
+        //assert
+        assertThatThrownBy(()->orderServices
+                .clearAllOrders()).isInstanceOf(OrderExceptions.class)
+                .hasMessage("There are no orders here!");
     }
 
     @Test
-    public void getAllOrders() {
+    public void deleteOrderById() throws BusinessLogic {
+        //given
+        OrderCreationResponse response = orderServices.createOrder(request);
+        //when
+        boolean orderIsDeleted = orderServices.deleteOrderById(response.getId());
+
+        //assert
+        assertThatThrownBy(()->orderServices
+                .getOrderById(response.getId()))
+                .isInstanceOf(OrderExceptions.class)
+                .hasMessage("This user with id " +response.getId()+" does not exist");
+        assertThat(orderIsDeleted).isTrue();
+
+    }
+
+    @Test
+    public void updateOrder() throws BusinessLogic {
+        //given
+        OrderCreationResponse response = orderServices.createOrder(request);
+        //when
+        OrderCreationRequest request1 = new OrderCreationRequest();
+        request1.setQuantity(100);
+        OrderCreationResponse response1 = orderServices.updateOrder(response.getId(), request1);
+        //assert
+//        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
+//        assertThat(response1.getSize()).isEqualTo(response.getSize());
+//        assertThat(response1.getQuantity()).isEqualTo(orderServices.getOrderById(response.getId()).getQuantity());
+
+
+    }
+
+    @Test
+    public void getAllOrders() throws BusinessLogic {
+        //given
+        OrderCreationRequest request1 = new OrderCreationRequest();
+        request1.setOrderDate(LocalDateTime.now());
+        request1.setSize(12.5);
+        request1.setImageUrl("imageUrl");
+        request1.setQuantity(1);
+        OrderCreationResponse response = orderServices.createOrder(request);
+        OrderCreationResponse response1 = orderServices.createOrder(request1);
+
+        //when
+        List<PrintOrder> orders = orderServices.getAllOrders();
+
+        assertThat(orders.size()).isEqualTo(2);
+
     }
 
     @Test
