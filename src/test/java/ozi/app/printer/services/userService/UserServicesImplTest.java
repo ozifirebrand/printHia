@@ -26,11 +26,6 @@ class UserServicesImplTest {
        request = new UserCreationRequest();
     }
 
-    @AfterEach
-    void tearDown() {
-        userServices.deleteAllUsers();
-    }
-
     @Test
     void createUser() throws BusinessLogic {
 
@@ -47,10 +42,11 @@ class UserServicesImplTest {
         assertThat(response.getEmail()).isEqualTo("firstname@mail.com");
         assertThat(response.getFirstName()).isEqualTo("firstname");
         assertThat(response.getLastName()).isEqualTo("lastname");
+        userServices.deleteAllUsers();
     }
 
     @Test
-    public void assert_CompleteUserDetails_BeforeSavingUser_MissingPassword(){
+    public void assert_IncompleteUserDetails_BeforeSavingUser_MissingPassword() {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -61,7 +57,7 @@ class UserServicesImplTest {
         assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogic.class).hasMessage("Incomplete details");
     }
     @Test
-    public void assert_CompleteUserDetails_BeforeSavingUser_MissingLastname(){
+    public void assert_IncompleteUserDetails_BeforeSavingUser_MissingLastname() {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -73,7 +69,7 @@ class UserServicesImplTest {
     }
 
     @Test
-    public void assert_CompleteUserDetails_BeforeSavingUser_MissingFirstname(){
+    public void assert_IncompleteUserDetails_BeforeSavingUser_MissingFirstname(){
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -101,10 +97,12 @@ class UserServicesImplTest {
         assertThat(user.getLastName()).isEqualTo(response.getLastName());
         assertThat(user.getEmail()).isEqualTo(response.getEmail());
         assertThat(user.getId()).isEqualTo(response.getId());
+        userServices.deleteAllUsers();
+
     }
 
     @Test
-    public void test_ifIdIsEmpty_FindByIdThrows_UserDoesNotExistErrorMessage() throws BusinessLogic {
+    public void test_ifIdIsEmpty_FindByIdThrows_UserDoesNotExistErrorMessage() {
         //given no condition
         //when
         //assert
@@ -130,10 +128,12 @@ class UserServicesImplTest {
         assertThat(user.getId()).isEqualTo(response.getId());
         assertThat(user.getFirstName()).isEqualTo(response.getFirstName());
         assertThat(user.getLastName()).isEqualTo(response.getLastName());
+        userServices.deleteAllUsers();
+
     }
 
     @Test
-    public void test_ifEmailIsEmpty_FindByEmailThrows_UserWithEmailDoesNotExistErrorMessage() throws BusinessLogic {
+    public void test_ifEmailIsEmpty_FindByEmailThrows_UserWithEmailDoesNotExistErrorMessage(){
         //given no condition
         //when
         //assert
@@ -145,11 +145,14 @@ class UserServicesImplTest {
 
 
                                     //todo TEST FOR INVALID EMAIL VALUE - REGEX
+                                    @Test
+                                    public void updateUser() {
+                                    }
 
 
 
     @Test
-    void getAllUsers() throws BusinessLogic {
+    public void getAllUsers() throws BusinessLogic {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -166,20 +169,18 @@ class UserServicesImplTest {
 
 
         //when
-        UserCreationResponse response = userServices.createUser(request);
-        UserCreationResponse response1 = userServices.createUser(request1);
+       userServices.createUser(request);
+       userServices.createUser(request1);
 
         //assert
         assertThat(userServices.getAllUsers().size()).isEqualTo(2);
+        userServices.deleteAllUsers();
 
     }
 
-    @Test
-    void updateUser() {
-    }
 
     @Test
-    void deleteUserById() throws BusinessLogic {
+    public void deleteUserById() throws BusinessLogic {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -196,41 +197,7 @@ class UserServicesImplTest {
     }
 
     @Test
-    void deleteUserByEmail() throws BusinessLogic {
-        //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
-        UserCreationResponse response = userServices.createUser(request);
-
-        //when
-        boolean userIsDeleted = userServices.deleteUserByEmail(response.getEmail());
-
-        //assert
-        assertThat(userIsDeleted).isTrue();
-    }
-
-    @Test
-    void deleteUserByUsername() throws BusinessLogic {
-        //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
-        UserCreationResponse response = userServices.createUser(request);
-
-        //when
-        boolean userIsDeleted = userServices.deleteUserByUsername(response.getUsername());
-
-        //assert
-        assertThat(userIsDeleted).isTrue();
-    }
-
-    @Test
-    void deleteAllUsers() throws BusinessLogic {
+    public void deleteAllUsers() throws BusinessLogic {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -244,8 +211,8 @@ class UserServicesImplTest {
         request1.setLastName("lastname1");
         request1.setPassword("password1");
         //when
-        UserCreationResponse response = userServices.createUser(request);
-        UserCreationResponse response1 = userServices.createUser(request1);
+        userServices.createUser(request);
+        userServices.createUser(request1);
         //assert
         assertThat(userServices.getAllUsers().size()).isEqualTo(2);
 
@@ -254,5 +221,13 @@ class UserServicesImplTest {
 
         //assert
         assertThat(userServices.getAllUsers().size()).isEqualTo(0);
+    }
+
+    @Test
+    public void test_ThrowException_WhenDeleteAllOnEmptyDB(){
+        //given
+        //when
+        //assert
+        assertThatThrownBy(()->userServices.deleteAllUsers()).isInstanceOf(BusinessLogic.class).hasMessage("There are no users in here!");
     }
 }
