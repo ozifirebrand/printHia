@@ -86,7 +86,8 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public boolean deleteUserByUsername(String username) {
-        return false;
+        userRepository.deletePrintUserByUsername(username);
+        return userRepository.findPrintUserByUsername(username).isEmpty();
     }
 
     @Override
