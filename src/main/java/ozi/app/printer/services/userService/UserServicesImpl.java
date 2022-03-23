@@ -77,21 +77,13 @@ public class UserServicesImpl implements UserServices {
         return userRepository.findById(id).isEmpty();
     }
 
-    @Override
-    public boolean deleteUserByEmail(String email) {
-        userRepository.deletePrintUserByEmail(email);
 
-        return userRepository.findPrintUserByEmail(email).isEmpty();
-    }
 
     @Override
-    public boolean deleteUserByUsername(String username) {
-        userRepository.deletePrintUserByUsername(username);
-        return userRepository.findPrintUserByUsername(username).isEmpty();
-    }
-
-    @Override
-    public boolean deleteAllUsers() {
+    public boolean deleteAllUsers() throws BusinessLogic {
+        if ( userRepository.findAll().size() == 0  ){
+            throw new BusinessLogic("There are no users in here!");
+        }
         userRepository.deleteAll();
 
         return userRepository.findAll().isEmpty();

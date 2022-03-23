@@ -16,7 +16,5 @@ public interface UserServices {
     List<PrintUser> getAllUsers();
     UserCreationResponse updateUser(UserCreationRequest request);
     boolean deleteUserById(String id);
-    boolean deleteUserByEmail(String email);
-    boolean deleteUserByUsername(String username);
-    boolean deleteAllUsers();
+    boolean deleteAllUsers() throws BusinessLogic;
 }
