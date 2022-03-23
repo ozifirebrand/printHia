@@ -1,8 +1,11 @@
 package ozi.app.printer.data.models;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
@@ -10,6 +13,8 @@ import java.time.LocalDateTime;
 @Data
 public class PrintOrder {
     @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(strategy = "uuid", name = "system-uuid")
     private String id;
 
     private String imageUrl;
@@ -22,7 +27,7 @@ public class PrintOrder {
 
     private LocalDateTime deliveryDate;
 
-    private boolean hasOrdered= true;
+    private boolean ordered= true;
 
     private OrderStatus orderStatus;
 }
