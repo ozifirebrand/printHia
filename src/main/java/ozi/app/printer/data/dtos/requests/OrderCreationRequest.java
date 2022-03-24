@@ -13,5 +13,5 @@ public class OrderCreationRequest {
 
     private int quantity;
 
-    private LocalDateTime orderDate= LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    private LocalDateTime orderDate;
 }
