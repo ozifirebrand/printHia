@@ -14,6 +14,7 @@ import ozi.app.printer.exceptions.BusinessLogic;
 import ozi.app.printer.exceptions.OrderExceptions;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +29,7 @@ class OrderServicesImplTest {
     @BeforeEach
     void setUp() {
         request= new OrderCreationRequest();
-        request.setOrderDate(LocalDateTime.now());
+        request.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         request.setSize(12.5);
         request.setImageUrl("imageUrl");
         request.setQuantity(1);
@@ -78,7 +79,7 @@ class OrderServicesImplTest {
         PrintOrder foundOrder = orderServices.getOrderById(response.getId());
         //assert
         assertThat(foundOrder.getImageUrl()).isEqualTo(response.getImageUrl());
-//        assertThat(foundOrder.getOrderDate()).isEqualTo(response.getOrderDate());
+        assertThat(foundOrder.getOrderDate()).isEqualTo(response.getOrderDate());
         assertThat(foundOrder.getOrderStatus()).isEqualTo(OrderStatus.ORDERED);
         assertThat(foundOrder.getSize()).isEqualTo(response.getSize());
         assertThat(foundOrder.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
