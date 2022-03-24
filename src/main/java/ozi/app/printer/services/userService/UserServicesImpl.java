@@ -1,18 +1,15 @@
 package ozi.app.printer.services.userService;
 
-import com.fasterxml.jackson.core.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ozi.app.printer.data.dtos.requests.UserCreationRequest;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.repositories.UserRepository;
-import ozi.app.printer.exceptions.BusinessLogic;
+import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.mapper.Mapper;
-import ozi.app.printer.services.userService.UserServices;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -21,7 +18,7 @@ public class UserServicesImpl implements UserServices {
     private UserRepository userRepository;
 
     @Override
-    public UserCreationResponse createUser(UserCreationRequest request) throws BusinessLogic {
+    public UserCreationResponse createUser(UserCreationRequest request) throws BusinessLogicException {
         validateRequestDetails(request);
 
         PrintUser user = Mapper.map(request);
@@ -29,7 +26,7 @@ public class UserServicesImpl implements UserServices {
         return Mapper.map(savedUser);
     }
 
-    private void validateRequestDetails(UserCreationRequest request) throws BusinessLogic {
+    private void validateRequestDetails(UserCreationRequest request) throws BusinessLogicException {
         boolean emailIsEmpty= request.getEmail() == null;
         boolean usernameIsEmpty= request.getUsername() == null;
         boolean firstNameIsEmpty = request.getFirstName() == null;
@@ -37,25 +34,25 @@ public class UserServicesImpl implements UserServices {
         boolean passwordIsEmpty = request.getPassword() == null;
 
         if ( emailIsEmpty || usernameIsEmpty|| firstNameIsEmpty|| lastNameIsEmpty|| passwordIsEmpty ){
-            throw new BusinessLogic("Incomplete details");
+            throw new BusinessLogicException("Incomplete details");
         }
     }
 
     @Override
-    public PrintUser getUserById(String id) throws BusinessLogic {
+    public PrintUser getUserById(String id) throws BusinessLogicException {
         Optional<PrintUser> optionalPrintUser = userRepository.findById(id);
         if ( optionalPrintUser.isEmpty() ){
-            throw new BusinessLogic("This user does not exist!");
+            throw new BusinessLogicException("This user does not exist!");
         }
         return optionalPrintUser.get();
     }
 
 
     @Override
-    public PrintUser getUserByEmail(String email) throws BusinessLogic {
+    public PrintUser getUserByEmail(String email) throws BusinessLogicException {
         Optional<PrintUser> optionalPrintUser = userRepository.findPrintUserByEmail(email);
         if ( optionalPrintUser.isEmpty() ){
-            throw new BusinessLogic("This user with email \""+email +"\" does not exist!");
+            throw new BusinessLogicException("This user with email \""+email +"\" does not exist!");
         }
         return optionalPrintUser.get();
     }
@@ -80,9 +77,9 @@ public class UserServicesImpl implements UserServices {
 
 
     @Override
-    public boolean deleteAllUsers() throws BusinessLogic {
+    public boolean deleteAllUsers() throws BusinessLogicException {
         if ( userRepository.findAll().size() == 0  ){
-            throw new BusinessLogic("There are no users in here!");
+            throw new BusinessLogicException("There are no users in here!");
         }
         userRepository.deleteAll();
         return userRepository.findAll().isEmpty();

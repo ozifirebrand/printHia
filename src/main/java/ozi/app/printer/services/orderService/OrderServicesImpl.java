@@ -8,8 +8,8 @@ import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.data.repositories.OrderRepository;
-import ozi.app.printer.exceptions.BusinessLogic;
-import ozi.app.printer.exceptions.OrderExceptions;
+import ozi.app.printer.exceptions.BusinessLogicException;
+import ozi.app.printer.exceptions.OrderException;
 import ozi.app.printer.mapper.Mapper;
 
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ public class OrderServicesImpl implements OrderServices {
     private OrderRepository orderRepository;
 
     @Override
-    public OrderCreationResponse createOrder(OrderCreationRequest request) throws BusinessLogic {
+    public OrderCreationResponse createOrder(OrderCreationRequest request) throws BusinessLogicException {
         LocalDateTime date= LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
         request.setOrderDate(date);
         validate(request);
@@ -42,30 +42,30 @@ public class OrderServicesImpl implements OrderServices {
         return orderRepository.save(order);
     }
 
-    private void validate(OrderCreationRequest request) throws BusinessLogic {
+    private void validate(OrderCreationRequest request) throws BusinessLogicException {
         boolean orderIsEmpty= request.getOrderDate() == null;
         boolean imageUrlIsEmpty= request.getImageUrl() == null;
         boolean sizeIsEmpty = request.getSize()==0;
         boolean quantityIsEmpty = request.getQuantity() == 0;
 
         if ( orderIsEmpty || imageUrlIsEmpty|| sizeIsEmpty|| quantityIsEmpty ){
-            throw new BusinessLogic("The given details are incomplete");
+            throw new BusinessLogicException("The given details are incomplete");
         }
     }
 
     @Override
-    public PrintOrder getOrderById(String id) throws OrderExceptions {
+    public PrintOrder getOrderById(String id) throws OrderException {
         Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(id);
         if ( optionalPrintOrder.isEmpty() ){
-            throw new OrderExceptions("This user with id " +id+" does not exist");
+            throw new OrderException("This user with id " +id+" does not exist");
         }
         return optionalPrintOrder.get();
     }
 
     @Override
-    public boolean clearAllOrders() throws OrderExceptions {
+    public boolean clearAllOrders() throws OrderException {
 //        if (orderRepository.findAll().size()==0 )
-//            throw new OrderExceptions("There are no orders here!");
+//            throw new OrderException("There are no orders here!");
 
         orderRepository.deleteAll();
         return getAllOrders().size()==0;
@@ -78,7 +78,7 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public OrderCreationResponse updateOrder(String id, OrderCreationRequest request) throws OrderExceptions {
+    public OrderCreationResponse updateOrder(String id, OrderCreationRequest request) throws OrderException {
         PrintOrder order = getOrderById(id);
         if ( order!= null )
         saveOrder(order);
@@ -86,8 +86,8 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public List<PrintOrder> getAllOrders() throws OrderExceptions {
-        if ( orderRepository.findAll().size() == 0 )throw new OrderExceptions("There are no orders here!");
+    public List<PrintOrder> getAllOrders() throws OrderException {
+        if ( orderRepository.findAll().size() == 0 )throw new OrderException("There are no orders here!");
         return orderRepository.findAll();
     }
 

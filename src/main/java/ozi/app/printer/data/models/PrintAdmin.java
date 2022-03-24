@@ -22,7 +22,7 @@ public class PrintAdmin {
 
     private String phoneNumber;
 
-    @Column(unique= true)
+//    @Column(unique= true)
     private String email;
 
     private String username;

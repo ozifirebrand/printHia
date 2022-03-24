@@ -1,7 +1,7 @@
 package ozi.app.printer.exceptions;
 
-public class BusinessLogic extends Exception{
-    public BusinessLogic(String message){
+public class BusinessLogicException extends Exception{
+    public BusinessLogicException(String message){
         super(message);
     }
 }
