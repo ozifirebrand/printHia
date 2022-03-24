@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.AdminCreationRequest;
 import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
+import ozi.app.printer.data.models.PrintAdmin;
 import ozi.app.printer.exceptions.AdminException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,10 +62,26 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void getAdminById() {
+    public void getAdminById() throws AdminException {
+        //given
+        AdminCreationResponse response = services.createAdmin(request);
+
+        //when
+        PrintAdmin admin = services.getAdminById(response.getId());
+
+        //assert
+        assertThat(admin.getId()).isEqualTo(response.getId());
+        assertThat(admin.getEmail()).isEqualTo(response.getEmail());
+        assertThat(admin.getFirstName()).isEqualTo(response.getFirstName());
+        assertThat(admin.getLastName()).isEqualTo(response.getLastName());
+        assertThat(admin.getPhoneNumber()).isNotNull();
+        assertThat(admin.getUsername()).isNotNull();
+
 
     }
 
+//    @Test
+//    public void test_InvalidIdThrows_NoSuchUserException ()
     @Test
     void getAdminByEmail() {
     }
