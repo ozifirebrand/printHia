@@ -1,5 +1,6 @@
 package ozi.app.printer.services.orderService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
+@Slf4j
 class OrderServicesImplTest {
     @Autowired
     private OrderServices orderServices;
@@ -166,7 +168,7 @@ class OrderServicesImplTest {
         OrderCreationResponse response1 = orderServices.createOrder(request1);
         //when
         List<PrintOrder> orders = orderServices.getOrdersByDate(response.getOrderDate());
-
+        log.info(String.valueOf(orders));
         assertThat(orders.get(0).getOrderDate()).isEqualTo(response.getOrderDate());
         assertThat(orders.get(1).getOrderDate()).isEqualTo(response1.getOrderDate());
     }
