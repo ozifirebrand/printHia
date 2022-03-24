@@ -1,8 +1,10 @@
 package ozi.app.printer.mapper;
 
 import ozi.app.printer.data.dtos.requests.*;
+import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
+import ozi.app.printer.data.models.PrintAdmin;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.data.models.PrintUser;
 
@@ -51,6 +53,25 @@ public class Mapper {
         response.setSize(order.getSize());
         response.setImageUrl(order.getImageUrl());
         response.setOrderStatus(order.getOrderStatus());
+        return response;
+    }
+
+    public static PrintAdmin map (AdminCreationRequest request){
+        PrintAdmin admin = new PrintAdmin();
+        admin.setEmail(request.getEmail());
+        admin.setFirstName(request.getFirstName());
+        admin.setUsername(request.getUsername());
+        admin.setLastName(request.getLastName());
+        return admin;
+    }
+
+    public static AdminCreationResponse map (PrintAdmin admin){
+        AdminCreationResponse response = new AdminCreationResponse();
+        response.setId(admin.getId());
+        response.setUsername(admin.getUsername());
+        response.setEmail(admin.getEmail());
+        response.setFirstName(admin.getFirstName());
+        response.setLastName(admin.getLastName());
         return response;
     }
 }
