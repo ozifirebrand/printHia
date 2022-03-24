@@ -9,6 +9,7 @@ import ozi.app.printer.data.dtos.requests.AdminCreationRequest;
 import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
 import ozi.app.printer.data.models.PrintAdmin;
 import ozi.app.printer.exceptions.AdminException;
+import ozi.app.printer.exceptions.BusinessLogicException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -62,7 +63,7 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void getAdminById() throws AdminException {
+    public void getAdminById() throws BusinessLogicException {
         //given
         AdminCreationResponse response = services.createAdmin(request);
 
@@ -80,8 +81,14 @@ class AdminServicesImplTest {
 
     }
 
-//    @Test
-//    public void test_InvalidIdThrows_NoSuchUserException ()
+    @Test
+    public void test_InvalidIdThrows_NoSuchUserException (){
+
+        //assert
+        assertThatThrownBy(()->services.getAdminById("an_invalid_id"))
+                .isInstanceOf(AdminException.class)
+                .hasMessage("No such user with id an_invalid_id exists!");
+    }
     @Test
     void getAdminByEmail() {
     }
