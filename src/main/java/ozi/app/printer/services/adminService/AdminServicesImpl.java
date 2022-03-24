@@ -10,6 +10,7 @@ import ozi.app.printer.exceptions.AdminException;
 import ozi.app.printer.mapper.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminServicesImpl implements AdminServices {
@@ -19,6 +20,7 @@ public class AdminServicesImpl implements AdminServices {
     public AdminCreationResponse createAdmin(AdminCreationRequest request) throws AdminException {
         validate(request);
         PrintAdmin admin = Mapper.map(request);
+        admin.setPhoneNumber(request.getPhoneNumber());
         PrintAdmin savedAdmin = adminRepository.save(admin);
         return Mapper.map(savedAdmin);
     }
@@ -36,7 +38,8 @@ public class AdminServicesImpl implements AdminServices {
 
     @Override
     public PrintAdmin getAdminById(String id) {
-        return null;
+        Optional<PrintAdmin> optionalPrintAdmin = adminRepository.findById(id);
+        return optionalPrintAdmin.orElse(null);
     }
 
     @Override
