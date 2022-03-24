@@ -10,12 +10,12 @@ import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Slf4j
 class OrderRepositoryTest {
 
     @Autowired
@@ -28,7 +28,7 @@ class OrderRepositoryTest {
         order = new PrintOrder();
         order.setOrdered(true);
         order.setOrderStatus(OrderStatus.ORDERED);
-        order.setOrderDate(LocalDateTime.now());
+        order.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
         order.setQuantity(1);
         order.setSize(43);
         order.setImageUrl("myimageurl.com");
@@ -45,7 +45,6 @@ class OrderRepositoryTest {
         //given...
         //when
         savedOrder = repository.save(order);
-        log.info(repository.toString());
 
         //assert
         assertThat(savedOrder.getOrderDate()).isEqualTo(order.getOrderDate());
@@ -62,7 +61,6 @@ class OrderRepositoryTest {
         savedOrder = repository.save(order);
         //when
         List<PrintOrder> orders = repository.getByOrderDate(order.getOrderDate());
-        log.info(String.valueOf(orders));
 
         assertThat(orders).isNotNull();
         assertThat(orders.get(0)).isNotNull();
