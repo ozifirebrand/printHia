@@ -1,9 +1,7 @@
 package ozi.app.printer.services.orderService;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
@@ -29,7 +27,7 @@ class OrderServicesImplTest {
     @BeforeEach
     void setUp() {
         request= new OrderCreationRequest();
-        request.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        request.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
         request.setSize(12.5);
         request.setImageUrl("imageUrl");
         request.setQuantity(1);
@@ -150,7 +148,7 @@ class OrderServicesImplTest {
         //when
         List<PrintOrder> orders = orderServices.getAllOrders();
 
-        assertThat(orders.size()).isEqualTo(3);
+        assertThat(orders.size()).isEqualTo(2);
 
     }
 
@@ -163,18 +161,31 @@ class OrderServicesImplTest {
         request1.setSize(12.5);
         request1.setImageUrl("imageUrl");
         request1.setQuantity(1);
-        orderServices.createOrder(request);
-        orderServices.createOrder(request1);
         OrderCreationResponse response = orderServices.createOrder(request);
         OrderCreationResponse response1 = orderServices.createOrder(request1);
         //when
         List<PrintOrder> orders = orderServices.getOrdersByDate(response.getOrderDate());
-        log.info(String.valueOf(orders));
+        //assert
         assertThat(orders.get(0).getOrderDate()).isEqualTo(response.getOrderDate());
         assertThat(orders.get(1).getOrderDate()).isEqualTo(response1.getOrderDate());
     }
 
     @Test
-    public void getOrdersByStatus() {
+    public void getOrdersByStatus() throws BusinessLogic {
+        //given
+        OrderCreationRequest request1 = new OrderCreationRequest();
+        request1.setOrderDate(LocalDateTime.now());
+        request1.setSize(12.5);
+        request1.setImageUrl("imageUrl");
+        request1.setQuantity(1);
+        OrderCreationResponse response = orderServices.createOrder(request);
+        OrderCreationResponse response1 = orderServices.createOrder(request1);
+        //when
+        List<PrintOrder> orders = orderServices.getOrdersByStatus(response.getOrderStatus());
+        log.info(orderServices.getAllOrders().toString());
+        //assert
+        assertThat(orders.get(0).getOrderStatus()).isEqualTo(response.getOrderStatus());
+        assertThat(orders.get(1).getOrderStatus()).isEqualTo(response1.getOrderStatus());
+        assertThat(orderServices.getAllOrders().size()).isEqualTo(2);
     }
 }
