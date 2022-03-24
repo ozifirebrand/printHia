@@ -25,6 +25,7 @@ public class AdminServicesImpl implements AdminServices {
         PrintAdmin savedAdmin = adminRepository.save(admin);
         return Mapper.map(savedAdmin);
     }
+
     private void validate(AdminCreationRequest request) throws AdminException {
         boolean firstNameIsEmpty= request.getFirstName() == null;
         boolean lastNameIsEmpty= request.getLastName() == null;
@@ -46,8 +47,10 @@ public class AdminServicesImpl implements AdminServices {
     }
 
     @Override
-    public PrintAdmin getAdminByEmail(String id) {
-        return null;
+    public PrintAdmin getAdminByEmail(String email) throws BusinessLogicException{
+        PrintAdmin admin = adminRepository.findByEmail(email);
+        if ( admin == null ) throw new AdminException("No such user with email "+ email +" exists!");
+        return admin ;
     }
 
     @Override
