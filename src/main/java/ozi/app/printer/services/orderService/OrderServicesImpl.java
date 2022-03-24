@@ -13,6 +13,7 @@ import ozi.app.printer.exceptions.OrderExceptions;
 import ozi.app.printer.mapper.Mapper;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,7 +91,8 @@ public class OrderServicesImpl implements OrderServices {
 
     @Override
     public List<PrintOrder> getOrdersByDate(LocalDateTime dateTime) {
-        return orderRepository.findByOrderDate(dateTime);
+        LocalDateTime truncatedTime = dateTime.truncatedTo(ChronoUnit.SECONDS);
+        return orderRepository.getByOrderDate(truncatedTime);
     }
 
     @Override
