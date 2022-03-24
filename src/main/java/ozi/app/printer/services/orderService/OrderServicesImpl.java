@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
-import ozi.app.printer.data.dtos.requests.UserCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
@@ -29,8 +28,9 @@ public class OrderServicesImpl implements OrderServices {
         PrintOrder order = Mapper.map(request);
         order.setOrdered(true);
         order.setOrderStatus(OrderStatus.ORDERED);
+        order.setDeliveryDate(order.getOrderDate().plusDays(3) );
+
         PrintOrder savedOrder = saveOrder(order);
-        savedOrder.setDeliveryDate(savedOrder.getOrderDate().plusDays(3) );
         return Mapper.map(savedOrder);
     }
 
@@ -90,7 +90,7 @@ public class OrderServicesImpl implements OrderServices {
 
     @Override
     public List<PrintOrder> getOrdersByDate(LocalDateTime dateTime) {
-        return orderRepository.findPrintOrderByOrderDate(dateTime);
+        return orderRepository.findByOrderDate(dateTime);
     }
 
     @Override
