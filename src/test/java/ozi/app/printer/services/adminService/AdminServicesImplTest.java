@@ -89,8 +89,31 @@ class AdminServicesImplTest {
                 .isInstanceOf(AdminException.class)
                 .hasMessage("No such user with id an_invalid_id exists!");
     }
+
     @Test
-    void getAdminByEmail() {
+    void getAdminByEmail() throws BusinessLogicException {
+        //given...
+        request.setEmail("myownemail.com");
+        AdminCreationResponse response = services.createAdmin(request);
+
+        //when
+        PrintAdmin admin = services.getAdminByEmail(response.getEmail());
+        assertThat(admin).isNotNull();
+        assertThat(admin.getEmail()).isEqualTo(response.getEmail());
+        assertThat(admin.getUsername()).isEqualTo(response.getUsername());
+        assertThat(admin.getFirstName()).isEqualTo(response.getFirstName());
+        assertThat(admin.getLastName()).isEqualTo(response.getLastName());
+        assertThat(admin.getId()).isEqualTo(response.getId());
+        assertThat(admin.getPhoneNumber()).isEqualTo(request.getPhoneNumber());
+    }
+
+    @Test
+    public void test_InvalidEmailThrows_NoSuchUserException (){
+
+        //assert
+        assertThatThrownBy(()->services.getAdminByEmail("an_invalid_email"))
+                .isInstanceOf(AdminException.class)
+                .hasMessage("No such user with email an_invalid_email exists!");
     }
 
     @Test
