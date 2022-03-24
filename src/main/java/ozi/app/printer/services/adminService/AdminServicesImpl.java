@@ -7,6 +7,7 @@ import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
 import ozi.app.printer.data.models.PrintAdmin;
 import ozi.app.printer.data.repositories.AdminRepository;
 import ozi.app.printer.exceptions.AdminException;
+import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.mapper.Mapper;
 
 import java.util.List;
@@ -37,9 +38,11 @@ public class AdminServicesImpl implements AdminServices {
     }
 
     @Override
-    public PrintAdmin getAdminById(String id) {
+    public PrintAdmin getAdminById(String id) throws BusinessLogicException {
         Optional<PrintAdmin> optionalPrintAdmin = adminRepository.findById(id);
-        return optionalPrintAdmin.orElse(null);
+        if ( optionalPrintAdmin.isEmpty() )
+            throw new AdminException("No such user with id "+id +" exists!");
+        return optionalPrintAdmin.get();
     }
 
     @Override
