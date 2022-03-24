@@ -11,7 +11,7 @@ import java.util.List;
 public interface AdminServices {
     AdminCreationResponse createAdmin (AdminCreationRequest request) throws AdminException;
     PrintAdmin getAdminById(String id) throws AdminException, BusinessLogicException;
-    PrintAdmin getAdminByEmail(String id);
+    PrintAdmin getAdminByEmail(String email) throws BusinessLogicException;
     PrintAdmin getAdminByUsername(String username);
     List<PrintAdmin> getAllAdmins();
     boolean deleteAdminById(String id);
