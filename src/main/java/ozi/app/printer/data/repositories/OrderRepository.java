@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<PrintOrder, String> {
-    List<PrintOrder> findPrintOrderByOrderDate(LocalDateTime orderDate);
+    List<PrintOrder> getByOrderDate(LocalDateTime date);
 }
