@@ -1,6 +1,5 @@
 package ozi.app.printer.services.userService;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.UserCreationRequest;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintUser;
-import ozi.app.printer.exceptions.BusinessLogic;
+import ozi.app.printer.exceptions.BusinessLogicException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -27,7 +26,7 @@ class UserServicesImplTest {
     }
 
     @Test
-    void createUser() throws BusinessLogic {
+    void createUser() throws BusinessLogicException {
 
         //given
         request.setEmail("firstname@mail.com");
@@ -54,7 +53,7 @@ class UserServicesImplTest {
         request.setLastName("lastname");
         //when
         //then
-        assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogic.class).hasMessage("Incomplete details");
+        assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogicException.class).hasMessage("Incomplete details");
     }
     @Test
     public void assert_IncompleteUserDetails_BeforeSavingUser_MissingLastname() {
@@ -65,7 +64,7 @@ class UserServicesImplTest {
         request.setPassword("password");
         //when
         //then
-        assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogic.class).hasMessage("Incomplete details");
+        assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogicException.class).hasMessage("Incomplete details");
     }
 
     @Test
@@ -77,12 +76,12 @@ class UserServicesImplTest {
         request.setPassword("password");
         //when
         //then
-        assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogic.class).hasMessage("Incomplete details");
+        assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogicException.class).hasMessage("Incomplete details");
     }
 
 
     @Test
-    void getUserById() throws BusinessLogic {
+    void getUserById() throws BusinessLogicException {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -106,11 +105,11 @@ class UserServicesImplTest {
         //given no condition
         //when
         //assert
-        assertThatThrownBy(()->userServices.getUserById("just_any_value")).isInstanceOf(BusinessLogic.class).hasMessage("This user does not exist!");
+        assertThatThrownBy(()->userServices.getUserById("just_any_value")).isInstanceOf(BusinessLogicException.class).hasMessage("This user does not exist!");
     }
 
     @Test
-    void getUserByEmail() throws BusinessLogic {
+    void getUserByEmail() throws BusinessLogicException {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -139,7 +138,7 @@ class UserServicesImplTest {
         //assert
         assertThatThrownBy(()->userServices
                 .getUserByEmail("invalidemail@mail.com"))
-                .isInstanceOf(BusinessLogic.class)
+                .isInstanceOf(BusinessLogicException.class)
                 .hasMessage("This user with email \"invalidemail@mail.com\" does not exist!");
     }
 
@@ -152,7 +151,7 @@ class UserServicesImplTest {
 
 
     @Test
-    public void getAllUsers() throws BusinessLogic {
+    public void getAllUsers() throws BusinessLogicException {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -180,7 +179,7 @@ class UserServicesImplTest {
 
 
     @Test
-    public void deleteUserById() throws BusinessLogic {
+    public void deleteUserById() throws BusinessLogicException {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -197,7 +196,7 @@ class UserServicesImplTest {
     }
 
     @Test
-    public void deleteAllUsers() throws BusinessLogic {
+    public void deleteAllUsers() throws BusinessLogicException {
         //given
         request.setEmail("firstname@mail.com");
         request.setUsername("username");
@@ -228,6 +227,6 @@ class UserServicesImplTest {
         //given
         //when
         //assert
-        assertThatThrownBy(()->userServices.deleteAllUsers()).isInstanceOf(BusinessLogic.class).hasMessage("There are no users in here!");
+        assertThatThrownBy(()->userServices.deleteAllUsers()).isInstanceOf(BusinessLogicException.class).hasMessage("There are no users in here!");
     }
 }

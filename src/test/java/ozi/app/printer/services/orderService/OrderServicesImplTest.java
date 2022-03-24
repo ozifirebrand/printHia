@@ -8,8 +8,8 @@ import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
-import ozi.app.printer.exceptions.BusinessLogic;
-import ozi.app.printer.exceptions.OrderExceptions;
+import ozi.app.printer.exceptions.BusinessLogicException;
+import ozi.app.printer.exceptions.OrderException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -34,12 +34,12 @@ class OrderServicesImplTest {
     }
 
     @AfterEach
-    void tearDown() throws OrderExceptions {
+    void tearDown() throws OrderException {
 //        orderServices.clearAllOrders();
     }
 
     @Test
-    public void createOrder() throws BusinessLogic {
+    public void createOrder() throws BusinessLogicException {
         //given
 
         //when
@@ -64,12 +64,12 @@ class OrderServicesImplTest {
         //when
         //assert
 
-        assertThatThrownBy(()->orderServices.createOrder(request)).isInstanceOf(BusinessLogic.class).hasMessage("The given details are incomplete");
+        assertThatThrownBy(()->orderServices.createOrder(request)).isInstanceOf(BusinessLogicException.class).hasMessage("The given details are incomplete");
 
     }
 
     @Test
-    public void getOrderById() throws BusinessLogic {
+    public void getOrderById() throws BusinessLogicException {
         //given...
         OrderCreationResponse response =orderServices.createOrder(request);
 
@@ -90,7 +90,7 @@ class OrderServicesImplTest {
     public void test_ThrowOrderDoesNotExistException_WhenUnknownId_FindById(){
         //assert
         assertThatThrownBy(()->orderServices.getOrderById("an_invalid_id"))
-                .isInstanceOf(OrderExceptions.class)
+                .isInstanceOf(OrderException.class)
                 .hasMessage("This user with id an_invalid_id does not exist");
     }
 
@@ -98,12 +98,12 @@ class OrderServicesImplTest {
     public void testThrowNoOrdersError_WhenClearAll_OnEmptyDB(){
         //assert
         assertThatThrownBy(()->orderServices
-                .getAllOrders()).isInstanceOf(OrderExceptions.class)
+                .getAllOrders()).isInstanceOf(OrderException.class)
                 .hasMessage("There are no orders here!");
     }
 
     @Test
-    public void deleteOrderById() throws BusinessLogic {
+    public void deleteOrderById() throws BusinessLogicException {
         //given
         OrderCreationResponse response = orderServices.createOrder(request);
         //when
@@ -112,14 +112,14 @@ class OrderServicesImplTest {
         //assert
         assertThatThrownBy(()->orderServices
                 .getOrderById(response.getId()))
-                .isInstanceOf(OrderExceptions.class)
+                .isInstanceOf(OrderException.class)
                 .hasMessage("This user with id " +response.getId()+" does not exist");
         assertThat(orderIsDeleted).isTrue();
 
     }
 
     @Test
-    public void updateOrder() throws BusinessLogic {
+    public void updateOrder() throws BusinessLogicException {
         //given
         OrderCreationResponse response = orderServices.createOrder(request);
         //when
@@ -135,7 +135,7 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void getAllOrders() throws BusinessLogic {
+    public void getAllOrders() throws BusinessLogicException {
         //given
         OrderCreationRequest request1 = new OrderCreationRequest();
         request1.setOrderDate(LocalDateTime.now());
@@ -154,7 +154,7 @@ class OrderServicesImplTest {
 
 
     @Test
-    public void getOrdersByDate() throws BusinessLogic {
+    public void getOrdersByDate() throws BusinessLogicException {
         //given
         OrderCreationRequest request1 = new OrderCreationRequest();
         request1.setOrderDate(LocalDateTime.now());
@@ -171,7 +171,7 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void getOrdersByStatus() throws BusinessLogic {
+    public void getOrdersByStatus() throws BusinessLogicException {
         //given
         OrderCreationRequest request1 = new OrderCreationRequest();
         request1.setOrderDate(LocalDateTime.now());
