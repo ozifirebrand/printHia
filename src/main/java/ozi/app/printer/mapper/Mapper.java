@@ -3,9 +3,11 @@ package ozi.app.printer.mapper;
 import ozi.app.printer.data.dtos.requests.*;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
-import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.data.models.PrintUser;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Mapper {
     public static PrintUser map (UserCreationRequest request){
@@ -42,8 +44,10 @@ public class Mapper {
 
         OrderCreationResponse response = new OrderCreationResponse();
         response.setId(order.getId());
-        response.setOrderDate(order.getOrderDate());
+        LocalDateTime truncatedTime = order.getOrderDate().truncatedTo(ChronoUnit.SECONDS);
+        response.setOrderDate(truncatedTime);
         response.setQuantity(order.getQuantity());
+        response.setDeliveryDate(order.getDeliveryDate());
         response.setSize(order.getSize());
         response.setImageUrl(order.getImageUrl());
         response.setOrderStatus(order.getOrderStatus());
