@@ -25,6 +25,8 @@ public class OrderServicesImpl implements OrderServices {
 
     @Override
     public OrderCreationResponse createOrder(OrderCreationRequest request) throws BusinessLogic {
+        LocalDateTime date= LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
+        request.setOrderDate(date);
         validate(request);
         PrintOrder order = Mapper.map(request);
         order.setOrdered(true);
@@ -89,14 +91,15 @@ public class OrderServicesImpl implements OrderServices {
         return orderRepository.findAll();
     }
 
+
     @Override
-    public List<PrintOrder> getOrdersByDate(LocalDateTime dateTime) {
-        LocalDateTime truncatedTime = dateTime.truncatedTo(ChronoUnit.SECONDS);
-        return orderRepository.getByOrderDate(truncatedTime);
+    public List<PrintOrder> getOrdersByDate(LocalDateTime date) {
+        LocalDateTime truncatedDate = date.truncatedTo(ChronoUnit.DAYS);
+        return orderRepository.getByOrderDate(truncatedDate);
     }
 
     @Override
     public List<PrintOrder> getOrdersByStatus(OrderStatus status) {
-        return null;
+        return orderRepository.findByOrderStatus(status);
     }
 }
