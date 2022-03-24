@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.AdminCreationRequest;
 import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
-import ozi.app.printer.exceptions.AdminExceptions;
+import ozi.app.printer.exceptions.AdminException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,15 +21,6 @@ class AdminServicesImplTest {
 
     @BeforeEach
     public void setup(){
-    }
-
-    @AfterEach
-    public void tearDown(){
-    }
-
-    @Test
-    public void createAdmin() {
-        //given...
         request  = new AdminCreationRequest();
         request.setEmail("mymail.com");
         request.setFirstName("firstname");
@@ -37,6 +28,15 @@ class AdminServicesImplTest {
         request.setPassword("mypassword");
         request.setPhoneNumber("11114444");
         request.setUsername("username");
+    }
+
+    @AfterEach
+    public void tearDown(){
+    }
+
+    @Test
+    public void createAdmin() throws AdminException {
+        //given...
         //when
         AdminCreationResponse response = services.createAdmin(request);
 
@@ -51,21 +51,18 @@ class AdminServicesImplTest {
     @Test
     public void testIncompleteDetails_ThrowsException(){
         //given ...
-        request  = new AdminCreationRequest();
-        request.setEmail("mmail.com");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("mypassword");
-        request.setPhoneNumber("11114444");
+        request.setUsername(null);
         //when
         //assert
         assertThatThrownBy(()->services.createAdmin(request))
-                .isInstanceOf(AdminExceptions.class)
+                .isInstanceOf(AdminException.class)
                 .hasMessage("These details are incomplete");
 
     }
+
     @Test
     public void getAdminById() {
+
     }
 
     @Test
