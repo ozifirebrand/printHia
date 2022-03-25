@@ -12,7 +12,7 @@ public interface AdminServices {
     AdminCreationResponse createAdmin (AdminCreationRequest request) throws AdminException;
     PrintAdmin getAdminById(String id) throws AdminException, BusinessLogicException;
     PrintAdmin getAdminByEmail(String email) throws BusinessLogicException;
-    PrintAdmin getAdminByUsername(String username);
+    PrintAdmin getAdminByUsername(String username) throws BusinessLogicException;
     List<PrintAdmin> getAllAdmins();
     boolean deleteAdminById(String id);
     boolean deleteAllAdmins();
