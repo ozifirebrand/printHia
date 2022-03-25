@@ -189,7 +189,7 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void test_IfEmptyList_ThrowError() {
+    public void test_IfEmptyList_ThrowError() throws AdminException {
         //given...
         services.deleteAllAdmins();
         //when...
@@ -239,5 +239,13 @@ class AdminServicesImplTest {
         assertThatThrownBy(()->services.getAllAdmins())
                 .isInstanceOf(BusinessLogicException.class)
                 .hasMessage("There are no admins here!");
+    }
+
+    @Test
+    public void test_ThrowException_IfDeleteAll_OnEmptyDB(){
+        //assert
+        assertThatThrownBy(()->services.deleteAllAdmins())
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("There are no admins to delete!");
     }
 }
