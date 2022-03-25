@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface AdminServices {
     AdminCreationResponse createAdmin (AdminCreationRequest request) throws AdminException;
+    AdminCreationResponse updateAdmin (String id, AdminCreationRequest request) throws AdminException;
     PrintAdmin getAdminById(String id) throws AdminException, BusinessLogicException;
     PrintAdmin getAdminByEmail(String email) throws BusinessLogicException;
     PrintAdmin getAdminByUsername(String username) throws BusinessLogicException;

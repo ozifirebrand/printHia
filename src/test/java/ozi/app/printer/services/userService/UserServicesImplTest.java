@@ -145,11 +145,10 @@ class UserServicesImplTest {
 
 
                                     //todo TEST FOR INVALID EMAIL VALUE - REGEX
-                                    @Test
-                                    public void updateUser() {
-                                    }
 
-
+    @Test
+    public void updateUser() {
+    }
 
     @Test
     public void getAllUsers() throws BusinessLogicException {

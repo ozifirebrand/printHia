@@ -66,6 +66,10 @@ class AdminServicesImplTest {
     }
 
     @Test
+    public void updateAdmin() {
+    }
+
+    @Test
     public void getAdminById() throws BusinessLogicException {
         //given
         AdminCreationResponse response = services.createAdmin(request);

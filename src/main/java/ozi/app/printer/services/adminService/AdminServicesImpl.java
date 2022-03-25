@@ -26,6 +26,11 @@ public class AdminServicesImpl implements AdminServices {
         return Mapper.map(savedAdmin);
     }
 
+    @Override
+    public AdminCreationResponse updateAdmin(String id, AdminCreationRequest request) throws AdminException {
+        return null;
+    }
+
     private void validate(AdminCreationRequest request) throws AdminException {
         boolean firstNameIsEmpty= request.getFirstName() == null;
         boolean lastNameIsEmpty= request.getLastName() == null;
