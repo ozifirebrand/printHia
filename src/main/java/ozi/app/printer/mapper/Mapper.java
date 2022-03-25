@@ -17,6 +17,7 @@ public class Mapper {
         PrintUser user = new PrintUser();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
+        user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         return user;
