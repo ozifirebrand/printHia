@@ -98,6 +98,8 @@ class AdminServicesImplTest {
 
         //when
         PrintAdmin admin = services.getAdminByEmail(response.getEmail());
+
+        //assert
         assertThat(admin).isNotNull();
         assertThat(admin.getEmail()).isEqualTo(response.getEmail());
         assertThat(admin.getUsername()).isEqualTo(response.getUsername());
@@ -117,7 +119,38 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void getAdminByUsername() {
+    public void getAdminByUsername() throws BusinessLogicException {
+        //given
+        request.setEmail("myownemail2.com");
+        AdminCreationResponse response = services.createAdmin(request);
+
+        //when
+        PrintAdmin admin = services.getAdminByUsername(response.getUsername());
+
+        //assert
+        assertThat(admin).isNotNull();
+        assertThat(admin.getEmail()).isEqualTo(request.getEmail());
+        assertThat(admin.getUsername()).isEqualTo(request.getUsername());
+        assertThat(admin.getFirstName()).isEqualTo(request.getFirstName());
+        assertThat(admin.getLastName()).isEqualTo(request.getLastName());
+        assertThat(admin.getId()).isEqualTo(response.getId());
+        assertThat(admin.getPhoneNumber()).isEqualTo(request.getPhoneNumber());
+    }
+
+    @Test
+    public void test_IfEmptyUsername_ThrowEmptyUsernameInput() throws BusinessLogicException {
+        //assert
+        assertThatThrownBy(()->services.getAdminByUsername(""))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("This username cannot be empty!");
+    }
+
+    @Test
+    public void test_IfNullUsername_ThrowEmptyUsernameInput(){
+        //assert
+        assertThatThrownBy(()->services.getAdminByUsername(null))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("This username cannot be empty!");
     }
 
     @Test
