@@ -11,6 +11,8 @@ import ozi.app.printer.data.models.PrintAdmin;
 import ozi.app.printer.exceptions.AdminException;
 import ozi.app.printer.exceptions.BusinessLogicException;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -122,6 +124,7 @@ class AdminServicesImplTest {
     public void getAdminByUsername() throws BusinessLogicException {
         //given
         request.setEmail("myownemail2.com");
+        request.setUsername("user");
         AdminCreationResponse response = services.createAdmin(request);
 
         //when
@@ -154,11 +157,55 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void getAllAdmins() {
+    public void getAllAdmins() throws BusinessLogicException{
+        //given
+        AdminCreationRequest request1 = new AdminCreationRequest();
+        request1  = new AdminCreationRequest();
+        request1.setEmail("myownmail3.com");
+        request1.setFirstName("firstname");
+        request1.setLastName("lastname");
+        request1.setPassword("mypassword");
+        request1.setPhoneNumber("11114444");
+        request1.setUsername("username3");
+
+        AdminCreationResponse response = services.createAdmin(request);
+        AdminCreationResponse response1 = services.createAdmin(request1);
+
+        //when
+        List<PrintAdmin> admins = services.getAllAdmins();
+
+        //assert
+        assertThat(admins.size()).isEqualTo(2);
+        assertThat(admins.get(0).getUsername()).isEqualTo(response.getUsername());
+        assertThat(admins.get(0).getEmail()).isEqualTo(response.getEmail());
+        assertThat(admins.get(0).getFirstName()).isEqualTo(response.getFirstName());
+        assertThat(admins.get(0).getLastName()).isEqualTo(response.getLastName());
+        assertThat(admins.get(0).getId()).isEqualTo(response.getId());
+        assertThat(admins.get(1).getUsername()).isEqualTo(response1.getUsername());
+        assertThat(admins.get(1).getEmail()).isEqualTo(response1.getEmail());
+        assertThat(admins.get(1).getFirstName()).isEqualTo(response1.getFirstName());
+        assertThat(admins.get(1).getLastName()).isEqualTo(response1.getLastName());
+        assertThat(admins.get(1).getId()).isEqualTo(response1.getId());
+
+    }
+
+    @Test
+    public void test_IfEmptyList_ThrowError() throws BusinessLogicException {
+        //given...
+        AdminCreationResponse response = services.createAdmin(request);
+        services.deleteAdminById(response.getId());
+        //when...
+        //assert
+
+        assertThatThrownBy(()->services.getAllAdmins())
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("There are no admins here!");
     }
 
     @Test
     public void deleteAdminById() {
+        //given
+
     }
 
     @Test
