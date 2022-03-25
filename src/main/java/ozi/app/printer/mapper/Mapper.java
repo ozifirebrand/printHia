@@ -7,6 +7,7 @@ import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintAdmin;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.data.models.PrintUser;
+import ozi.app.printer.data.models.Role;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -23,6 +24,7 @@ public class Mapper {
     }
 
     public static UserCreationResponse map(PrintUser user){
+        user.setRole(Role.USER);
         UserCreationResponse response = new UserCreationResponse();
 
         response.setEmail(user.getEmail());
@@ -30,6 +32,7 @@ public class Mapper {
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
         response.setId(user.getId());
+        response.setRole(user.getRole());
         return response;
     }
 
@@ -66,12 +69,14 @@ public class Mapper {
     }
 
     public static AdminCreationResponse map (PrintAdmin admin){
+        admin.setRole(Role.ADMIN);
         AdminCreationResponse response = new AdminCreationResponse();
         response.setId(admin.getId());
         response.setUsername(admin.getUsername());
         response.setEmail(admin.getEmail());
         response.setFirstName(admin.getFirstName());
         response.setLastName(admin.getLastName());
+        response.setRole(admin.getRole());
         return response;
     }
 }
