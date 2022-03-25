@@ -69,11 +69,13 @@ public class AdminServicesImpl implements AdminServices {
 
     @Override
     public boolean deleteAdminById(String id) {
-        return false;
+        adminRepository.deleteById(id);
+        return adminRepository.findById(id).isEmpty();
     }
 
     @Override
     public boolean deleteAllAdmins() {
-        return false;
+        adminRepository.deleteAll();
+        return adminRepository.findAll().isEmpty();
     }
 }
