@@ -1,6 +1,7 @@
 package ozi.app.printer.data.dtos.responses;
 
 import lombok.Data;
+import ozi.app.printer.data.models.Role;
 
 @Data
 public class AdminCreationResponse {
@@ -13,4 +14,6 @@ public class AdminCreationResponse {
     private String email;
 
     private String username;
+
+    private Role role;
 }
