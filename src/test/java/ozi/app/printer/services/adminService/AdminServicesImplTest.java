@@ -141,7 +141,7 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void test_IfEmptyUsername_ThrowEmptyUsernameInput() throws BusinessLogicException {
+    public void test_IfEmptyUsername_ThrowEmptyUsernameInput(){
         //assert
         assertThatThrownBy(()->services.getAdminByUsername(""))
                 .isInstanceOf(BusinessLogicException.class)
@@ -160,7 +160,6 @@ class AdminServicesImplTest {
     public void getAllAdmins() throws BusinessLogicException{
         //given
         AdminCreationRequest request1 = new AdminCreationRequest();
-        request1  = new AdminCreationRequest();
         request1.setEmail("myownmail3.com");
         request1.setFirstName("firstname");
         request1.setLastName("lastname");
@@ -192,6 +191,7 @@ class AdminServicesImplTest {
     @Test
     public void test_IfEmptyList_ThrowError() {
         //given...
+        services.deleteAllAdmins();
         //when...
         //assert
 
@@ -201,12 +201,43 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void deleteAdminById() {
+    public void deleteAdminById() throws BusinessLogicException {
         //given
+        AdminCreationResponse response = services.createAdmin(request);
+
+        //when
+        boolean isDeleted = services.deleteAdminById(response.getId());
+
+        //assert
+        assertThat(isDeleted).isTrue();
+        assertThatThrownBy(()->services.getAdminById(response.getId()))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("No such user with id " +response.getId()+" exists!");
 
     }
 
     @Test
-    public void deleteAllAdmins() {
+    public void deleteAllAdmins() throws BusinessLogicException {
+        //given
+
+        AdminCreationRequest request1 = new AdminCreationRequest();
+        request1.setEmail("myownmail3.com");
+        request1.setFirstName("firstname");
+        request1.setLastName("lastname");
+        request1.setPassword("mypassword");
+        request1.setPhoneNumber("11114444");
+        request1.setUsername("username3");
+
+        services.createAdmin(request);
+        services.createAdmin(request1);
+
+        //when
+        boolean noAdmin = services.deleteAllAdmins();
+
+        //assert
+        assertThat(noAdmin).isTrue();
+        assertThatThrownBy(()->services.getAllAdmins())
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("There are no admins here!");
     }
 }
