@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.AdminCreationRequest;
 import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
 import ozi.app.printer.data.models.PrintAdmin;
+import ozi.app.printer.data.models.Role;
 import ozi.app.printer.exceptions.AdminException;
 import ozi.app.printer.exceptions.BusinessLogicException;
 
@@ -247,5 +248,18 @@ class AdminServicesImplTest {
         assertThatThrownBy(()->services.deleteAllAdmins())
                 .isInstanceOf(BusinessLogicException.class)
                 .hasMessage("There are no admins to delete!");
+    }
+
+    @Test
+    public void test_UserRoleIsAdmin() throws BusinessLogicException {
+        //given
+        AdminCreationResponse response = services.createAdmin(request);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getRole()).isEqualTo(Role.ADMIN);
+        assertThat(response.getUsername()).isEqualTo(request.getUsername());
+        assertThat(response.getFirstName()).isEqualTo(request.getFirstName());
+        assertThat(response.getLastName()).isEqualTo(request.getLastName());
+        assertThat(response.getId()).isNotNull();
     }
 }

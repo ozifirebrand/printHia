@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.UserCreationRequest;
+import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintUser;
+import ozi.app.printer.data.models.Role;
 import ozi.app.printer.exceptions.BusinessLogicException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,6 +57,7 @@ class UserServicesImplTest {
         //then
         assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogicException.class).hasMessage("Incomplete details");
     }
+
     @Test
     public void assert_IncompleteUserDetails_BeforeSavingUser_MissingLastname() {
         //given
@@ -78,7 +81,6 @@ class UserServicesImplTest {
         //then
         assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogicException.class).hasMessage("Incomplete details");
     }
-
 
     @Test
     void getUserById() throws BusinessLogicException {
@@ -228,5 +230,27 @@ class UserServicesImplTest {
         //when
         //assert
         assertThatThrownBy(()->userServices.deleteAllUsers()).isInstanceOf(BusinessLogicException.class).hasMessage("There are no users in here!");
+    }
+
+
+    @Test
+    public void test_UserRoleIsAdmin() throws BusinessLogicException {
+
+        //given
+        request.setEmail("firstname@mail.com");
+        request.setUsername("username");
+        request.setFirstName("firstname");
+        request.setLastName("lastname");
+        request.setPassword("password");
+        //when
+        UserCreationResponse response = userServices.createUser(request);
+
+        //assert
+        assertThat(response).isNotNull();
+        assertThat(response.getRole()).isEqualTo(Role.USER);
+        assertThat(response.getUsername()).isEqualTo(request.getUsername());
+        assertThat(response.getFirstName()).isEqualTo(request.getFirstName());
+        assertThat(response.getLastName()).isEqualTo(request.getLastName());
+        assertThat(response.getId()).isNotNull();
     }
 }
