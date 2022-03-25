@@ -15,5 +15,5 @@ public interface AdminServices {
     PrintAdmin getAdminByUsername(String username) throws BusinessLogicException;
     List<PrintAdmin> getAllAdmins() throws AdminException;
     boolean deleteAdminById(String id);
-    boolean deleteAllAdmins();
+    boolean deleteAllAdmins() throws AdminException;
 }
