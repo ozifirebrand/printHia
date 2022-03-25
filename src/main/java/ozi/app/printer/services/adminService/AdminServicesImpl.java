@@ -74,7 +74,9 @@ public class AdminServicesImpl implements AdminServices {
     }
 
     @Override
-    public boolean deleteAllAdmins() {
+    public boolean deleteAllAdmins() throws AdminException {
+        if ( adminRepository.findAll().size()==0 )
+            throw new AdminException("There are no admins to delete!");
         adminRepository.deleteAll();
         return adminRepository.findAll().isEmpty();
     }
