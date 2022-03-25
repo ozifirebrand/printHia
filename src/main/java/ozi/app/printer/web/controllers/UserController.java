@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
+import ozi.app.printer.data.dtos.requests.UserCreationRequest;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.services.orderService.OrderServices;
 import ozi.app.printer.services.userService.UserServices;
@@ -24,14 +25,26 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/orders")
-    public ResponseEntity<?> viewOrders(@RequestParam String id){
+    @GetMapping("/order/{id}")
+    public ResponseEntity<?> viewOrder(@PathVariable String id){
 
         return null;
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<?> editProfileDetails(@RequestParam String id){
+    @GetMapping("/orders")
+    public ResponseEntity<?> viewAllOrders(@RequestParam String id){
+
+        return null;
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<?> viewProfileDetails(@RequestParam String id){
+
+        return null;
+    }
+
+    @PostMapping("/profile/edit")
+    public ResponseEntity<?> editProfileDetails(@RequestParam String id, UserCreationRequest request){
 
         return null;
     }
