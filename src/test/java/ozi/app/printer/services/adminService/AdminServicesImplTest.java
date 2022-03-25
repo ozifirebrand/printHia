@@ -190,10 +190,8 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void test_IfEmptyList_ThrowError() throws BusinessLogicException {
+    public void test_IfEmptyList_ThrowError() {
         //given...
-        AdminCreationResponse response = services.createAdmin(request);
-        services.deleteAdminById(response.getId());
         //when...
         //assert
 
