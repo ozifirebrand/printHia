@@ -27,5 +27,7 @@ public class PrintAdmin {
 
     private String username;
 
+    private Role role;
+
     private String password;
 }
