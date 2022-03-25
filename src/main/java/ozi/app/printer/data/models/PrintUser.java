@@ -26,6 +26,8 @@ public class PrintUser {
     @Column(unique = true)
     private String email;
 
+    private Role role;
+
     @OneToMany
     private List<PrintOrder> orders;
 }
