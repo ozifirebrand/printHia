@@ -63,7 +63,7 @@ public class AdminServicesImpl implements AdminServices {
     @Override
     public List<PrintAdmin> getAllAdmins() throws AdminException {
         List<PrintAdmin> admins = adminRepository.findAll();
-        if (admins==null  ) throw new AdminException("There are no admins here!");
+        if (admins.size()==0  ) throw new AdminException("There are no admins here!");
         return admins;
     }
 
