@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.UserCreationRequest;
-import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.models.Role;
@@ -18,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UserServicesImplTest {
 
     @Autowired
-    private UserServicesImpl userServices;
+    private UserServices userServices;
 
     private UserCreationRequest request;
 
@@ -225,7 +224,8 @@ class UserServicesImplTest {
     }
 
     @Test
-    public void test_ThrowException_WhenDeleteAllOnEmptyDB(){
+    public void test_ThrowException_WhenDeleteAllOnEmptyDB() throws BusinessLogicException {
+        userServices.deleteAllUsers();
         //given
         //when
         //assert
@@ -234,7 +234,7 @@ class UserServicesImplTest {
 
 
     @Test
-    public void test_UserRoleIsAdmin() throws BusinessLogicException {
+    public void test_UserRoleIsUser() throws BusinessLogicException {
 
         //given
         request.setEmail("firstname@mail.com");
