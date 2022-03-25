@@ -5,4 +5,6 @@ import ozi.app.printer.data.models.PrintAdmin;
 
 public interface AdminRepository extends JpaRepository<PrintAdmin, String> {
     PrintAdmin findByEmail(String email);
+
+    PrintAdmin findByUsername(String username);
 }
