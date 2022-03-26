@@ -33,7 +33,6 @@ class UserControllerTest {
 
     @Autowired
     @Mock
-
     private OrderServices orderServices;
 
     @BeforeEach
@@ -48,17 +47,17 @@ class UserControllerTest {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
     }
+
     @Test
     public void makePrintOrder() throws Exception {
         //given @ setup
-
 
         //when
         //assert
         mockMvc.perform(post("/api/user/print/order")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().is(200))
+                .andExpect(status().is(201))
                 .andDo(print());
     }
 
@@ -70,7 +69,7 @@ class UserControllerTest {
         //when
         String id = response.getId();
         log.info(" id is {}", id);
-        mockMvc.perform(get("/api/user/print/order/ff8080817fc6adad017fc6adbb270000")
+        mockMvc.perform(get("/api/user/print/order/"+id)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().is(200))
