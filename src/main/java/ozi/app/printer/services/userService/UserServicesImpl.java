@@ -47,7 +47,6 @@ public class UserServicesImpl implements UserServices {
         return optionalPrintUser.get();
     }
 
-
     @Override
     public PrintUser getUserByEmail(String email) throws BusinessLogicException {
         Optional<PrintUser> optionalPrintUser = userRepository.findPrintUserByEmail(email);
@@ -57,15 +56,9 @@ public class UserServicesImpl implements UserServices {
         return optionalPrintUser.get();
     }
 
-
     @Override
     public List<PrintUser> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    @Override
-    public UserCreationResponse updateUser(UserCreationRequest request) {
-        return null;
     }
 
     @Override
@@ -73,8 +66,6 @@ public class UserServicesImpl implements UserServices {
         userRepository.deleteById(id);
         return userRepository.findById(id).isEmpty();
     }
-
-
 
     @Override
     public boolean deleteAllUsers() throws BusinessLogicException {

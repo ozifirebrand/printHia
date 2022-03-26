@@ -12,7 +12,6 @@ public interface UserServices {
     PrintUser getUserById(String id) throws BusinessLogicException;
     PrintUser getUserByEmail(String email) throws BusinessLogicException;
     List<PrintUser> getAllUsers();
-    UserCreationResponse updateUser(UserCreationRequest request);
     boolean deleteUserById(String id);
     boolean deleteAllUsers() throws BusinessLogicException;
 }
