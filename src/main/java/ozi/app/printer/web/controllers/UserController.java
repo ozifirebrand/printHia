@@ -11,7 +11,7 @@ import ozi.app.printer.services.orderService.OrderServices;
 import ozi.app.printer.services.userService.UserServices;
 
 @Controller
-@RequestMapping("api/print")
+@RequestMapping("api/user/print")
 public class UserController {
     @Autowired
     private UserServices userServices;
