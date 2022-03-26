@@ -15,10 +15,13 @@ import java.util.Optional;
 
 @Service
 public class AdminServicesImpl implements AdminServices {
+
     @Autowired
     private AdminRepository adminRepository;
+
     @Override
-    public AdminCreationResponse createAdmin(AdminCreationRequest request) throws AdminException {
+    public AdminCreationResponse createAdmin(AdminCreationRequest request)
+            throws BusinessLogicException {
         validate(request);
         PrintAdmin admin = Mapper.map(request);
         admin.setPhoneNumber(request.getPhoneNumber());
@@ -26,12 +29,7 @@ public class AdminServicesImpl implements AdminServices {
         return Mapper.map(savedAdmin);
     }
 
-    @Override
-    public AdminCreationResponse updateAdmin(String id, AdminCreationRequest request) throws AdminException {
-        return null;
-    }
-
-    private void validate(AdminCreationRequest request) throws AdminException {
+    private void validate(AdminCreationRequest request) throws BusinessLogicException {
         boolean firstNameIsEmpty= request.getFirstName() == null;
         boolean lastNameIsEmpty= request.getLastName() == null;
         boolean emailIsEmpty= request.getEmail() == null;
