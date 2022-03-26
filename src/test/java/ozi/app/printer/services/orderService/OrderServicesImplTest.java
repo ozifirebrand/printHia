@@ -74,14 +74,14 @@ class OrderServicesImplTest {
         OrderCreationResponse response =orderServices.createOrder(request);
 
         //when
-        PrintOrder foundOrder = orderServices.getOrderById(response.getId());
+        OrderCreationResponse response1 = orderServices.getOrderById(response.getId());
         //assert
-        assertThat(foundOrder.getImageUrl()).isEqualTo(response.getImageUrl());
-        assertThat(foundOrder.getOrderDate()).isEqualTo(response.getOrderDate());
-        assertThat(foundOrder.getOrderStatus()).isEqualTo(OrderStatus.ORDERED);
-        assertThat(foundOrder.getSize()).isEqualTo(response.getSize());
-        assertThat(foundOrder.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
-        assertThat(foundOrder.getQuantity()).isEqualTo(response.getQuantity());
+        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
+        assertThat(response1.getOrderDate()).isEqualTo(response.getOrderDate());
+        assertThat(response1.getOrderStatus()).isEqualTo(OrderStatus.ORDERED);
+        assertThat(response1.getSize()).isEqualTo(response.getSize());
+        assertThat(response1.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
+        assertThat(response1.getQuantity()).isEqualTo(response.getQuantity());
 
 
     }
@@ -119,19 +119,17 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void updateOrder() throws BusinessLogicException {
+    public void clearAllOrders() throws BusinessLogicException {
         //given
         OrderCreationResponse response = orderServices.createOrder(request);
         //when
-        OrderCreationRequest request1 = new OrderCreationRequest();
-        request1.setQuantity(100);
-        OrderCreationResponse response1 = orderServices.updateOrder(response.getId(), request1);
+
+        boolean isCleared = orderServices.clearAllOrders();
+
         //assert
-//        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
-//        assertThat(response1.getSize()).isEqualTo(response.getSize());
-//        assertThat(response1.getQuantity()).isEqualTo(orderServices.getOrderById(response.getId()).getQuantity());
-
-
+        assertThat(isCleared).isTrue();
+        assertThatThrownBy(()->orderServices.getAllOrders())
+                .isInstanceOf(BusinessLogicException.class).hasMessage("There are no orders here!");
     }
 
     @Test
@@ -151,7 +149,6 @@ class OrderServicesImplTest {
         assertThat(orders.size()).isEqualTo(2);
 
     }
-
 
     @Test
     public void getOrdersByDate() throws BusinessLogicException {
