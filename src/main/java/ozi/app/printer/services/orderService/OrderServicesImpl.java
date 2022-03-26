@@ -54,21 +54,21 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public PrintOrder getOrderById(String id) throws OrderException {
+    public OrderCreationResponse getOrderById(String id) throws OrderException {
         Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(id);
         if ( optionalPrintOrder.isEmpty() ){
             throw new OrderException("This user with id " +id+" does not exist");
         }
-        return optionalPrintOrder.get();
+        return Mapper.map(optionalPrintOrder.get());
     }
 
     @Override
     public boolean clearAllOrders() throws OrderException {
-//        if (orderRepository.findAll().size()==0 )
-//            throw new OrderException("There are no orders here!");
+        if (orderRepository.findAll().size()==0 )
+            throw new OrderException("There are no orders here!");
 
         orderRepository.deleteAll();
-        return getAllOrders().size()==0;
+        return true;
     }
 
     @Override
@@ -77,19 +77,13 @@ public class OrderServicesImpl implements OrderServices {
         return true;
     }
 
-    @Override
-    public OrderCreationResponse updateOrder(String id, OrderCreationRequest request) throws OrderException {
-        PrintOrder order = getOrderById(id);
-        if ( order!= null )
-        saveOrder(order);
-        return null;
-    }
 
     @Override
     public List<PrintOrder> getAllOrders() throws OrderException {
         if ( orderRepository.findAll().size() == 0 )throw new OrderException("There are no orders here!");
         return orderRepository.findAll();
     }
+
 
 
     @Override

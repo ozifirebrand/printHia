@@ -13,10 +13,9 @@ import java.util.List;
 public interface OrderServices {
 
     OrderCreationResponse createOrder(OrderCreationRequest request) throws BusinessLogicException;
-    PrintOrder getOrderById(String id) throws OrderException;
+    OrderCreationResponse getOrderById(String id) throws OrderException;
     boolean clearAllOrders() throws OrderException;
     boolean deleteOrderById(String id);
-    OrderCreationResponse updateOrder(String id, OrderCreationRequest request) throws OrderException;
     List<PrintOrder> getAllOrders() throws OrderException;
     List<PrintOrder> getOrdersByDate(LocalDateTime dateTime);
     List<PrintOrder> getOrdersByStatus(OrderStatus status);
