@@ -40,7 +40,7 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void createAdmin() throws AdminException {
+    public void createAdmin() throws BusinessLogicException {
         //given...
         //when
         AdminCreationResponse response = services.createAdmin(request);
