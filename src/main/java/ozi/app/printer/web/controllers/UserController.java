@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.requests.UserCreationRequest;
+import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.PrintOrder;
+import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.services.orderService.OrderServices;
 import ozi.app.printer.services.userService.UserServices;
 
@@ -19,10 +21,11 @@ public class UserController {
     @Autowired
     private OrderServices orderServices;
 
-    @GetMapping("/order")
-    public ResponseEntity<?> makePrintOrder(@RequestBody OrderCreationRequest request){
-
-        return null;
+    @PostMapping("/order")
+    public ResponseEntity<?> makePrintOrder(@RequestBody OrderCreationRequest request)
+            throws BusinessLogicException {
+        OrderCreationResponse response = orderServices.createOrder(request);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/order/{id}")
@@ -37,19 +40,17 @@ public class UserController {
         return null;
     }
 
-    @PostMapping("/profile")
-    public ResponseEntity<?> viewProfileDetails(@RequestParam String id){
+        @GetMapping("/profile/{id}")
+    public ResponseEntity<?> viewProfileDetails(@PathVariable String id){
 
         return null;
     }
 
-    @PostMapping("/profile/edit")
+    @PatchMapping("/profile/edit")
     public ResponseEntity<?> editProfileDetails(@RequestParam String id, UserCreationRequest request){
 
         return null;
     }
-
-
 }
 
 
