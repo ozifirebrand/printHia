@@ -1,5 +1,6 @@
 package ozi.app.printer.web.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
@@ -62,8 +63,19 @@ class UserControllerTest {
     }
 
     @Test
+    public void test_badRequest_ifRequestBodyIncomplete() throws Exception {
+        //given
+        request.setSize(0);
+        mockMvc.perform(post("/api/user/print/order")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().is(400))
+                .andDo(print());
+    }
+
+    @Test
     public void viewOrder() throws Exception {
-        //given @ setup
+        //given
         OrderCreationResponse response = orderServices.createOrder(request);
 
         //when
@@ -75,6 +87,17 @@ class UserControllerTest {
                 .andExpect(status().is(200))
                 .andDo(print()
         );
+
+    }
+
+    @Test
+    public void test_badRequest_withInvalidId() throws Exception {
+        //assert
+        mockMvc.perform(get("/api/user/print/order/09489dagrauaAjyash")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().is(400))
+                .andDo(print());
 
     }
 
