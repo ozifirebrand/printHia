@@ -43,12 +43,12 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     private void validate(OrderCreationRequest request) throws BusinessLogicException {
-        boolean orderIsEmpty= request.getOrderDate() == null;
+        boolean orderDateIsEmpty= request.getOrderDate() == null;
         boolean imageUrlIsEmpty= request.getImageUrl() == null;
         boolean sizeIsEmpty = request.getSize()==0;
         boolean quantityIsEmpty = request.getQuantity() == 0;
 
-        if ( orderIsEmpty || imageUrlIsEmpty|| sizeIsEmpty|| quantityIsEmpty ){
+        if ( orderDateIsEmpty || imageUrlIsEmpty|| sizeIsEmpty|| quantityIsEmpty ){
             throw new BusinessLogicException("The given details are incomplete");
         }
     }
