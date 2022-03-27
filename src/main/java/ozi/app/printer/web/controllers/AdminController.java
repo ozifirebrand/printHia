@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ozi.app.printer.data.dtos.requests.AdminCreationRequest;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.services.adminService.AdminServices;
-import ozi.app.printer.services.orderService.OrderServices;
 import ozi.app.printer.services.userService.UserServices;
 
 import java.time.LocalDateTime;
@@ -21,8 +20,6 @@ public class AdminController {
     @Autowired
     private UserServices userServices;
 
-    @Autowired
-    private OrderServices orderServices;
 
     @PostMapping("/order/status")
     public ResponseEntity<?> changeOrderStatus(@RequestParam OrderStatus status){
