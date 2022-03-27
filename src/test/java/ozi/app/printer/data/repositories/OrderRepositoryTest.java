@@ -1,25 +1,20 @@
 package ozi.app.printer.data.repositories;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 class OrderRepositoryTest {
 
-    @Autowired
-    private OrderRepository repository;
 
     private PrintOrder order;
     PrintOrder savedOrder;
@@ -44,7 +39,6 @@ class OrderRepositoryTest {
     public void createOrder(){
         //given...
         //when
-        savedOrder = repository.save(order);
 
         //assert
         assertThat(savedOrder.getOrderDate()).isEqualTo(order.getOrderDate());
@@ -57,12 +51,5 @@ class OrderRepositoryTest {
     }
     @Test
     void findPrintOrderByOrderDate() {
-        //given
-        savedOrder = repository.save(order);
-        //when
-        List<PrintOrder> orders = repository.getByOrderDate(order.getOrderDate());
-
-        assertThat(orders).isNotNull();
-        assertThat(orders.get(0)).isNotNull();
     }
 }

@@ -1,6 +1,5 @@
 package ozi.app.printer.web.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +11,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
+import ozi.app.printer.data.dtos.requests.UserCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
-import ozi.app.printer.services.orderService.OrderServices;
+import ozi.app.printer.data.dtos.responses.UserCreationResponse;
+import ozi.app.printer.exceptions.BusinessLogicException;
+import ozi.app.printer.services.userService.UserServices;
 
 import java.time.LocalDateTime;
 
@@ -34,16 +36,27 @@ class UserControllerTest {
 
     @Autowired
     @Mock
-    private OrderServices orderServices;
+    private UserServices userServices;
 
+
+    private UserCreationRequest userCreationRequest;
+    private UserCreationResponse userCreationResponse;
     @BeforeEach
-    public void setUp(){
+    public void setUp() throws BusinessLogicException {
         request = new OrderCreationRequest();
 
         request.setOrderDate(LocalDateTime.now());
         request.setQuantity(1);
         request.setImageUrl("animageurl");
         request.setSize(42);
+
+        userCreationRequest.setLastName("Mobola");
+        userCreationRequest.setUsername("herUsername");
+        userCreationRequest.setPassword("amiMobOla?");
+        userCreationRequest.setEmail("mobola@gmail.com");
+
+        userCreationRequest.setFirstName("Folade");
+        userCreationResponse = userServices.createUser(userCreationRequest);
 
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -73,22 +86,6 @@ class UserControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    public void viewOrder() throws Exception {
-        //given
-        OrderCreationResponse response = orderServices.createOrder(request);
-
-        //when
-        String id = response.getId();
-        log.info(" id is {}", id);
-        mockMvc.perform(get("/api/user/print/order/"+id)
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().is(200))
-                .andDo(print()
-        );
-
-    }
 
     @Test
     public void test_badRequest_withInvalidId() throws Exception {
