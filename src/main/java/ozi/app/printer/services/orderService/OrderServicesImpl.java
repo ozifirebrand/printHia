@@ -8,6 +8,7 @@ import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.data.models.PrintUser;
+import ozi.app.printer.data.repositories.OrderRepository;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.exceptions.OrderException;
 import ozi.app.printer.mapper.Mapper;
@@ -29,22 +30,35 @@ public class OrderServicesImpl implements OrderServices {
     @Override
     public OrderCreationResponse createOrder(OrderCreationRequest request, String userId)
             throws BusinessLogicException {
-        PrintUser printUser = userServices.getUserById(userId);
-        List<PrintOrder> orders = printUser.getOrders();
-        LocalDateTime date= LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
-        request.setOrderDate(date);
+
+        List<PrintOrder> orders = getOrdersWith(userId);
+
+        setDateFor(request);
         validate(request);
         PrintOrder order = Mapper.map(request);
-        order.setOrdered(true);
-        order.setOrderStatus(OrderStatus.ORDERED);
-        order.setDeliveryDate(order.getOrderDate().plusDays(3) );
+        setOtherDetailsFor(order);
 
-        PrintOrder savedOrder = saveOrder(order);
+        PrintOrder savedOrder = save(order);
         orders.add(order);
         return Mapper.map(savedOrder);
     }
 
-    private PrintOrder saveOrder( PrintOrder order) {
+    private void setOtherDetailsFor(PrintOrder order) {
+        order.setOrdered(true);
+        order.setOrderStatus(OrderStatus.ORDERED);
+        order.setDeliveryDate(order.getOrderDate().plusDays(3) );
+    }
+
+    private void setDateFor(OrderCreationRequest request) {
+        request.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
+    }
+
+    private List<PrintOrder> getOrdersWith(String userId) throws BusinessLogicException {
+        PrintUser printUser = userServices.getUserById(userId);
+        return printUser.getOrders();
+    }
+
+    private PrintOrder save(PrintOrder order) {
 
         return orderRepository.save(order);
     }
@@ -61,16 +75,13 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public OrderCreationResponse getOrderById(String id) throws OrderException {
-        Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(id);
-        if ( optionalPrintOrder.isEmpty() ){
-            throw new OrderException("This user with id " +id+" does not exist");
-        }
-        return Mapper.map(optionalPrintOrder.get());
+    public boolean deleteOrderById(String id) {
+        orderRepository.deleteById(id);
+        return true;
     }
 
     @Override
-    public boolean clearAllOrders() throws OrderException {
+    public boolean deleteAllOrders() throws OrderException {
         if (orderRepository.findAll().size()==0 )
             throw new OrderException("There are no orders here!");
 
@@ -79,19 +90,13 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public boolean deleteOrderById(String id) {
-        orderRepository.deleteById(id);
-        return true;
+    public OrderCreationResponse getOrderById(String id) throws OrderException {
+        Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(id);
+        if ( optionalPrintOrder.isEmpty() ){
+            throw new OrderException("This user with id " +id+" does not exist");
+        }
+        return Mapper.map(optionalPrintOrder.get());
     }
-
-
-    @Override
-    public List<PrintOrder> getAllOrders() throws OrderException {
-        if ( orderRepository.findAll().size() == 0 )throw new OrderException("There are no orders here!");
-        return orderRepository.findAll();
-    }
-
-
 
     @Override
     public List<PrintOrder> getOrdersByDate(LocalDateTime date) {
@@ -103,4 +108,11 @@ public class OrderServicesImpl implements OrderServices {
     public List<PrintOrder> getOrdersByStatus(OrderStatus status) {
         return orderRepository.findByOrderStatus(status);
     }
+
+    @Override
+    public List<PrintOrder> getAllOrders() throws OrderException {
+        if ( orderRepository.findAll().size() == 0 )throw new OrderException("There are no orders here!");
+        return orderRepository.findAll();
+    }
+
 }

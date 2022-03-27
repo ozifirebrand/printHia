@@ -2,6 +2,7 @@ package ozi.app.printer.services.orderService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
@@ -24,9 +25,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Slf4j
 class OrderServicesImplTest {
     @Autowired
+    @Mock
     private OrderServices orderServices;
 
+
     @Autowired
+    @Mock
     private UserServices userServices;
 
     private OrderCreationRequest orderCreationRequest;
@@ -52,15 +56,17 @@ class OrderServicesImplTest {
 
     @AfterEach
     void tearDown() throws OrderException {
-//        orderServices.clearAllOrders();
+//        orderServices.deleteAllOrders();
     }
 
     @Test
     public void createOrder() throws BusinessLogicException {
-        //given
+        //given...
 
         //when
-        OrderCreationResponse response =orderServices.createOrder(orderCreationRequest, userCreationResponse.getId());
+        String userId = userCreationResponse.getId();
+        OrderCreationResponse response
+                =orderServices.createOrder(orderCreationRequest, userId);
 
         //assert
         assertThat(response).isNotNull();
@@ -81,14 +87,18 @@ class OrderServicesImplTest {
         //when
         //assert
 
-        assertThatThrownBy(()->orderServices.createOrder(request, userCreationResponse.getId())).isInstanceOf(BusinessLogicException.class).hasMessage("The given details are incomplete");
+        assertThatThrownBy(()->orderServices.createOrder(request, userCreationResponse.getId()))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("The given details are incomplete");
 
     }
 
     @Test
     public void getOrderById() throws BusinessLogicException {
         //given...
-        OrderCreationResponse response =orderServices.createOrder(orderCreationRequest, userCreationResponse.getId());
+        String userId = userCreationResponse.getId();
+
+        OrderCreationResponse response =orderServices.createOrder(orderCreationRequest, userId);
 
         //when
         OrderCreationResponse response1 = orderServices.getOrderById(response.getId());
@@ -122,7 +132,9 @@ class OrderServicesImplTest {
     @Test
     public void deleteOrderById() throws BusinessLogicException {
         //given
-        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest, userCreationResponse.getId());
+        String userId = userCreationResponse.getId();
+
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest, userId);
         //when
         boolean orderIsDeleted = orderServices.deleteOrderById(response.getId());
 
@@ -138,10 +150,12 @@ class OrderServicesImplTest {
     @Test
     public void clearAllOrders() throws BusinessLogicException {
         //given
-        orderServices.createOrder(orderCreationRequest, userCreationResponse.getId());
+        String userId = userCreationResponse.getId();
+
+        orderServices.createOrder(orderCreationRequest, userId);
         //when
 
-        boolean isCleared = orderServices.clearAllOrders();
+        boolean isCleared = orderServices.deleteAllOrders();
 
         //assert
         assertThat(isCleared).isTrue();
@@ -152,13 +166,15 @@ class OrderServicesImplTest {
     @Test
     public void getAllOrders() throws BusinessLogicException {
         //given
+        String userId = userCreationResponse.getId();
+
         OrderCreationRequest request1 = new OrderCreationRequest();
         request1.setOrderDate(LocalDateTime.now());
         request1.setSize(12.5);
         request1.setImageUrl("imageUrl");
         request1.setQuantity(1);
-        orderServices.createOrder(orderCreationRequest, userCreationResponse.getId());
-        orderServices.createOrder(request1, userCreationResponse.getId());
+        orderServices.createOrder(orderCreationRequest, userId);
+        orderServices.createOrder(request1, userId);
 
         //when
         List<PrintOrder> orders = orderServices.getAllOrders();
@@ -170,13 +186,15 @@ class OrderServicesImplTest {
     @Test
     public void getOrdersByDate() throws BusinessLogicException {
         //given
+        String userId = userCreationResponse.getId();
+
         OrderCreationRequest request1 = new OrderCreationRequest();
         request1.setOrderDate(LocalDateTime.now());
         request1.setSize(12.5);
         request1.setImageUrl("imageUrl");
         request1.setQuantity(1);
-        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest, userCreationResponse.getId());
-        OrderCreationResponse response1 = orderServices.createOrder(request1, userCreationResponse.getId());
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest, userId);
+        OrderCreationResponse response1 = orderServices.createOrder(request1, userId);
         //when
         List<PrintOrder> orders = orderServices.getOrdersByDate(response.getOrderDate());
         //assert
@@ -187,13 +205,15 @@ class OrderServicesImplTest {
     @Test
     public void getOrdersByStatus() throws BusinessLogicException {
         //given
+        String userId = userCreationResponse.getId();
+
         OrderCreationRequest request1 = new OrderCreationRequest();
         request1.setOrderDate(LocalDateTime.now());
         request1.setSize(12.5);
         request1.setImageUrl("imageUrl");
         request1.setQuantity(1);
-        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest, userCreationResponse.getId());
-        OrderCreationResponse response1 = orderServices.createOrder(request1, userCreationResponse.getId());
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest, userId);
+        OrderCreationResponse response1 = orderServices.createOrder(request1, userId);
         //when
         List<PrintOrder> orders = orderServices.getOrdersByStatus(response.getOrderStatus());
         log.info(orderServices.getAllOrders().toString());
