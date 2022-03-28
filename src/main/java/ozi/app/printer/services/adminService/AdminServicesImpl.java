@@ -33,11 +33,10 @@ public class AdminServicesImpl implements AdminServices {
         boolean firstNameIsEmpty= request.getFirstName() == null;
         boolean lastNameIsEmpty= request.getLastName() == null;
         boolean emailIsEmpty= request.getEmail() == null;
-        boolean usernameIsEmpty= request.getUsername() == null;
         boolean phoneNumberIsEmpty= request.getPhoneNumber() == null;
         boolean passwordIsEmpty= request.getPassword() == null;
 
-        if ( firstNameIsEmpty||lastNameIsEmpty||emailIsEmpty|| usernameIsEmpty||phoneNumberIsEmpty||passwordIsEmpty)
+        if ( firstNameIsEmpty||lastNameIsEmpty||emailIsEmpty||phoneNumberIsEmpty||passwordIsEmpty)
             throw new AdminException("These details are incomplete");
     }
 

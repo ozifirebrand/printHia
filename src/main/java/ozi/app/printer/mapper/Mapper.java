@@ -67,7 +67,6 @@ public class Mapper {
         PrintAdmin admin = new PrintAdmin();
         admin.setEmail(request.getEmail());
         admin.setFirstName(request.getFirstName());
-        admin.setUsername(request.getUsername());
         admin.setLastName(request.getLastName());
         return admin;
     }
@@ -76,7 +75,6 @@ public class Mapper {
         admin.setRole(Role.ADMIN);
         AdminCreationResponse response = new AdminCreationResponse();
         response.setId(admin.getId());
-        response.setUsername(admin.getUsername());
         response.setEmail(admin.getEmail());
         response.setFirstName(admin.getFirstName());
         response.setLastName(admin.getLastName());
