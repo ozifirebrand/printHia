@@ -11,6 +11,7 @@ import ozi.app.printer.data.models.Role;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 public class Mapper {
     public static PrintUser map (UserCreationRequest request){
@@ -20,6 +21,7 @@ public class Mapper {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
+        user.setOrders(new ArrayList<>());
         return user;
 
     }
@@ -34,6 +36,7 @@ public class Mapper {
         response.setLastName(user.getLastName());
         response.setId(user.getId());
         response.setRole(user.getRole());
+        response.setOrders(user.getOrders());
         return response;
     }
 
