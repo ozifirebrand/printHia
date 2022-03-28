@@ -29,7 +29,7 @@ public class PrintOrder {
 
     private boolean ordered;
 
-    private String username;
+    private String userId;
 
     private OrderStatus orderStatus;
 }
