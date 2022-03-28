@@ -11,14 +11,14 @@ import ozi.app.printer.data.models.PrintOrder;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
+import static org.mockito.Mockito.*;
 
 @DataJpaTest
 class OrderRepositoryTest {
-
 
     @Mock
     @Autowired
@@ -26,6 +26,7 @@ class OrderRepositoryTest {
 
     private PrintOrder order;
     private PrintOrder savedOrder;
+    private PrintOrder savedOrder1;
 
     @BeforeEach
     void setUp() {
@@ -37,6 +38,17 @@ class OrderRepositoryTest {
         order.setSize(43);
         order.setImageUrl("myimageurl.com");
         order.setDeliveryDate(order.getOrderDate().plusDays(3));
+        savedOrder =repository.save(order);
+
+        PrintOrder order1 = new PrintOrder();
+        order1.setOrdered(true);
+        order1.setOrderStatus(OrderStatus.ORDERED);
+        order1.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
+        order1.setQuantity(12);
+        order1.setSize(15);
+        order1.setImageUrl("myigeurl.com");
+        order1.setDeliveryDate(order.getOrderDate().plusDays(3));
+        savedOrder1= repository.save(order1);
 
     }
 
@@ -48,7 +60,7 @@ class OrderRepositoryTest {
     public void createOrder() {
         //given...
         //when
-        savedOrder = repository.save(order);
+
 
         //assert
         assertThat(savedOrder.getOrderDate()).isEqualTo(order.getOrderDate());
@@ -62,24 +74,29 @@ class OrderRepositoryTest {
 
     @Test
     public void findPrintOrderByOrderDate() {
-        //given
-        PrintOrder order1 = new PrintOrder();
-        order1.setOrdered(true);
-        order1.setOrderStatus(OrderStatus.ORDERED);
-        order1.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
-        order1.setQuantity(12);
-        order1.setSize(15);
-        order1.setImageUrl("myigeurl.com");
-        order1.setDeliveryDate(order.getOrderDate().plusDays(3));
-        repository.save(order);
-        repository.save(order1);
+        //given...@setup
 
         //when
-        List<PrintOrder> ordersByDate = repository.getByOrderDate(order.getOrderDate());
+        List<PrintOrder> ordersByDate = repository.findByOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
 
         //assert
-        assertThat(ordersByDate.size()).isEqualTo(2);
+//        assertThat(ordersByDate.size()).isEqualTo(2);
         assertThat(ordersByDate.get(0).getOrderDate()).isEqualTo(ordersByDate.get(1).getOrderDate());
 
     }
+
+//    @Test
+//    public void findPrintOrderByUserId(){
+//        //given @setup...
+//        PrintOrder savedOrder = repository.save(order);
+//        List<PrintOrder> orders = new ArrayList<>();
+//        orders.add(savedOrder);
+//        orders.add(savedOrder1);
+//
+//        //when
+//        when(repository.findPrintOrderByUserId("437uai82798")).thenReturn(orders);
+//        repository.findPrintOrderByUserId("437uai82798");
+//        verify(repository,times(1));
+//
+//    }
 }
