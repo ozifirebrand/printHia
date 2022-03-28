@@ -106,7 +106,13 @@ public class OrderServicesImpl implements OrderServices {
 
     @Override
     public List<PrintOrder> getOrdersByStatus(OrderStatus status) {
+
         return orderRepository.findByOrderStatus(status);
+    }
+
+    @Override
+    public List<PrintOrder> getOrdersByUserId(String userId) {
+        return null;
     }
 
     @Override

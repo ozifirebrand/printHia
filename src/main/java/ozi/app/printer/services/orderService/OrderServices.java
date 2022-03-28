@@ -19,4 +19,6 @@ public interface OrderServices {
     List<PrintOrder> getAllOrders() throws OrderException;
     List<PrintOrder> getOrdersByDate(LocalDateTime dateTime);
     List<PrintOrder> getOrdersByStatus(OrderStatus status);
+    List<PrintOrder> getOrdersByUserId(String userId);
+
 }
