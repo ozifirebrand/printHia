@@ -41,6 +41,7 @@ class AdminServicesImplTest {
     @Test
     public void createAdmin() throws BusinessLogicException {
         //given...
+        request.setEmail("myownemailnio.gmail.com");
         //when
         AdminCreationResponse response = services.createAdmin(request);
 
@@ -122,40 +123,6 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void getAdminByUsername() throws BusinessLogicException {
-        //given
-        request.setEmail("myownemail2.com");
-        AdminCreationResponse response = services.createAdmin(request);
-
-        //when
-        PrintAdmin admin = services.getAdminByUsername(response.getEmail());
-
-        //assert
-        assertThat(admin).isNotNull();
-        assertThat(admin.getEmail()).isEqualTo(request.getEmail());
-        assertThat(admin.getFirstName()).isEqualTo(request.getFirstName());
-        assertThat(admin.getLastName()).isEqualTo(request.getLastName());
-        assertThat(admin.getId()).isEqualTo(response.getId());
-        assertThat(admin.getPhoneNumber()).isEqualTo(request.getPhoneNumber());
-    }
-
-    @Test
-    public void test_IfEmptyUsername_ThrowEmptyUsernameInput(){
-        //assert
-        assertThatThrownBy(()->services.getAdminByUsername(""))
-                .isInstanceOf(BusinessLogicException.class)
-                .hasMessage("This username cannot be empty!");
-    }
-
-    @Test
-    public void test_IfNullUsername_ThrowEmptyUsernameInput(){
-        //assert
-        assertThatThrownBy(()->services.getAdminByUsername(null))
-                .isInstanceOf(BusinessLogicException.class)
-                .hasMessage("This username cannot be empty!");
-    }
-
-    @Test
     public void getAllAdmins() throws BusinessLogicException{
         //given
         AdminCreationRequest request1 = new AdminCreationRequest();
@@ -199,6 +166,7 @@ class AdminServicesImplTest {
     @Test
     public void deleteAdminById() throws BusinessLogicException {
         //given
+        request.setEmail("myanotheremail.gmail.com");
         AdminCreationResponse response = services.createAdmin(request);
 
         //when
@@ -247,6 +215,7 @@ class AdminServicesImplTest {
     @Test
     public void test_UserRoleIsAdmin() throws BusinessLogicException {
         //given
+        request.setEmail("anothermyemail.com");
         AdminCreationResponse response = services.createAdmin(request);
 
         assertThat(response).isNotNull();
