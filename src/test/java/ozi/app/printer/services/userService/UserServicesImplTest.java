@@ -5,17 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.requests.UserCreationRequest;
-import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.models.Role;
 import ozi.app.printer.exceptions.BusinessLogicException;
-import ozi.app.printer.services.orderService.OrderServices;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
