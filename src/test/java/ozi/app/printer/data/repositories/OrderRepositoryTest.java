@@ -20,7 +20,6 @@ import static org.mockito.Mockito.*;
 @DataJpaTest
 class OrderRepositoryTest {
 
-    @Mock
     @Autowired
     private OrderRepository repository;
 
@@ -82,21 +81,23 @@ class OrderRepositoryTest {
         //assert
         assertThat(ordersByDate.size()).isEqualTo(2);
         assertThat(ordersByDate.get(0).getOrderDate()).isEqualTo(ordersByDate.get(1).getOrderDate());
+        assertThat(ordersByDate.get(0).getId()).isEqualTo(savedOrder.getId());
+        assertThat(ordersByDate.get(1).getId()).isEqualTo(savedOrder1.getId());
 
     }
 
-//    @Test
-//    public void findPrintOrderByUserId(){
-//        //given @setup...
-//        PrintOrder savedOrder = repository.save(order);
-//        List<PrintOrder> orders = new ArrayList<>();
-//        orders.add(savedOrder);
-//        orders.add(savedOrder1);
-//
-//        //when
-//        when(repository.findPrintOrderByUserId("437uai82798")).thenReturn(orders);
-//        repository.findPrintOrderByUserId("437uai82798");
-//        verify(repository,times(1));
-//
-//    }
+    @Mock
+    private OrderRepository mockRepository;
+    @Test
+    public void findPrintOrderByUserId(){
+        //given @setup...
+
+        List<PrintOrder> orders = new ArrayList<>();
+
+        //when
+        when(mockRepository.findPrintOrderByUserId("437uai82798")).thenReturn(orders);
+        orders = mockRepository.findPrintOrderByUserId("437uai82798");
+        verify(mockRepository,times(1));
+
+    }
 }
