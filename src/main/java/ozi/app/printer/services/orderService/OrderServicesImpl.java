@@ -7,12 +7,10 @@ import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
-import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.repositories.OrderRepository;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.exceptions.OrderException;
 import ozi.app.printer.mapper.Mapper;
-import ozi.app.printer.services.userService.UserServices;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -24,9 +22,6 @@ import java.util.Optional;
 public class OrderServicesImpl implements OrderServices {
     @Autowired
     private OrderRepository orderRepository;
-    @Autowired
-    private UserServices userServices;
-
     @Override
     public OrderCreationResponse createOrder(OrderCreationRequest request, String userId)
             throws BusinessLogicException {
@@ -54,8 +49,7 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     private List<PrintOrder> getOrdersWith(String userId) throws BusinessLogicException {
-        PrintUser printUser = userServices.getUserById(userId);
-        return printUser.getOrders();
+        return orderRepository.findPrintOrderByUserId(userId);
     }
 
     private PrintOrder save(PrintOrder order) {
@@ -101,7 +95,7 @@ public class OrderServicesImpl implements OrderServices {
     @Override
     public List<PrintOrder> getOrdersByDate(LocalDateTime date) {
         LocalDateTime truncatedDate = date.truncatedTo(ChronoUnit.DAYS);
-        return orderRepository.getByOrderDate(truncatedDate);
+        return orderRepository.findByOrderDate(truncatedDate);
     }
 
     @Override
