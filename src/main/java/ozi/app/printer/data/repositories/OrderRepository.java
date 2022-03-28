@@ -11,4 +11,6 @@ public interface OrderRepository extends JpaRepository<PrintOrder, String> {
     List<PrintOrder> getByOrderDate(LocalDateTime date);
 
     List<PrintOrder> findByOrderStatus(OrderStatus status);
+
+    List<PrintOrder> findByUsername(String username);
 }
