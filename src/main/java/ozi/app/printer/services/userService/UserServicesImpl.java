@@ -2,12 +2,16 @@ package ozi.app.printer.services.userService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.requests.UserCreationRequest;
+import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
+import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.repositories.UserRepository;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.mapper.Mapper;
+import ozi.app.printer.services.orderService.OrderServices;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +20,9 @@ import java.util.Optional;
 public class UserServicesImpl implements UserServices {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderServices orderServices;
 
     @Override
     public UserCreationResponse createUser(UserCreationRequest request) throws BusinessLogicException {
@@ -68,11 +75,23 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public boolean deleteAllUsers() throws BusinessLogicException {
+    public void deleteAllUsers() throws BusinessLogicException {
         if ( userRepository.findAll().size() == 0  ){
             throw new BusinessLogicException("There are no users in here!");
         }
         userRepository.deleteAll();
-        return userRepository.findAll().isEmpty();
+        userRepository.findAll();
+    }
+
+    @Override
+    public OrderCreationResponse makeOrder(OrderCreationRequest request, String id) {
+
+        return null;
+    }
+
+    @Override
+    public List<PrintOrder> getAllOrders(String userId) {
+        PrintUser foundUser = userRepository.getById(userId);
+        return foundUser.getOrders();
     }
 }
