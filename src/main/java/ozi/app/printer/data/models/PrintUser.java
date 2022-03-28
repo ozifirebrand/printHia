@@ -1,6 +1,8 @@
 package ozi.app.printer.data.models;
 
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -29,5 +31,7 @@ public class PrintUser {
     private Role role;
 
     @OneToMany
+    @Fetch(FetchMode.JOIN)
+
     private List<PrintOrder> orders;
 }
