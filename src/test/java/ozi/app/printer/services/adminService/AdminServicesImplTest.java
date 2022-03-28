@@ -32,7 +32,6 @@ class AdminServicesImplTest {
         request.setLastName("lastname");
         request.setPassword("mypassword");
         request.setPhoneNumber("11114444");
-        request.setUsername("username");
     }
 
     @AfterEach
@@ -47,7 +46,6 @@ class AdminServicesImplTest {
 
         assertThat(response).isNotNull();
         assertThat(response.getEmail()).isEqualTo(request.getEmail());
-        assertThat(response.getUsername()).isEqualTo(request.getUsername());
         assertThat(response.getFirstName()).isEqualTo(request.getFirstName());
         assertThat(response.getLastName()).isEqualTo(request.getLastName());
         assertThat(response.getId()).isNotNull();
@@ -56,7 +54,7 @@ class AdminServicesImplTest {
     @Test
     public void testIncompleteDetails_ThrowsException(){
         //given ...
-        request.setUsername(null);
+        request.setEmail(null);
         //when
         //assert
         assertThatThrownBy(()->services.createAdmin(request))
@@ -83,7 +81,6 @@ class AdminServicesImplTest {
         assertThat(admin.getFirstName()).isEqualTo(response.getFirstName());
         assertThat(admin.getLastName()).isEqualTo(response.getLastName());
         assertThat(admin.getPhoneNumber()).isNotNull();
-        assertThat(admin.getUsername()).isNotNull();
 
 
     }
@@ -109,7 +106,6 @@ class AdminServicesImplTest {
         //assert
         assertThat(admin).isNotNull();
         assertThat(admin.getEmail()).isEqualTo(response.getEmail());
-        assertThat(admin.getUsername()).isEqualTo(response.getUsername());
         assertThat(admin.getFirstName()).isEqualTo(response.getFirstName());
         assertThat(admin.getLastName()).isEqualTo(response.getLastName());
         assertThat(admin.getId()).isEqualTo(response.getId());
@@ -129,16 +125,14 @@ class AdminServicesImplTest {
     public void getAdminByUsername() throws BusinessLogicException {
         //given
         request.setEmail("myownemail2.com");
-        request.setUsername("user");
         AdminCreationResponse response = services.createAdmin(request);
 
         //when
-        PrintAdmin admin = services.getAdminByUsername(response.getUsername());
+        PrintAdmin admin = services.getAdminByUsername(response.getEmail());
 
         //assert
         assertThat(admin).isNotNull();
         assertThat(admin.getEmail()).isEqualTo(request.getEmail());
-        assertThat(admin.getUsername()).isEqualTo(request.getUsername());
         assertThat(admin.getFirstName()).isEqualTo(request.getFirstName());
         assertThat(admin.getLastName()).isEqualTo(request.getLastName());
         assertThat(admin.getId()).isEqualTo(response.getId());
@@ -170,7 +164,6 @@ class AdminServicesImplTest {
         request1.setLastName("lastname");
         request1.setPassword("mypassword");
         request1.setPhoneNumber("11114444");
-        request1.setUsername("username3");
 
         AdminCreationResponse response = services.createAdmin(request);
         AdminCreationResponse response1 = services.createAdmin(request1);
@@ -180,12 +173,10 @@ class AdminServicesImplTest {
 
         //assert
         assertThat(admins.size()).isEqualTo(2);
-        assertThat(admins.get(0).getUsername()).isEqualTo(response.getUsername());
         assertThat(admins.get(0).getEmail()).isEqualTo(response.getEmail());
         assertThat(admins.get(0).getFirstName()).isEqualTo(response.getFirstName());
         assertThat(admins.get(0).getLastName()).isEqualTo(response.getLastName());
         assertThat(admins.get(0).getId()).isEqualTo(response.getId());
-        assertThat(admins.get(1).getUsername()).isEqualTo(response1.getUsername());
         assertThat(admins.get(1).getEmail()).isEqualTo(response1.getEmail());
         assertThat(admins.get(1).getFirstName()).isEqualTo(response1.getFirstName());
         assertThat(admins.get(1).getLastName()).isEqualTo(response1.getLastName());
@@ -231,7 +222,6 @@ class AdminServicesImplTest {
         request1.setLastName("lastname");
         request1.setPassword("mypassword");
         request1.setPhoneNumber("11114444");
-        request1.setUsername("username3");
 
         services.createAdmin(request);
         services.createAdmin(request1);
@@ -261,7 +251,6 @@ class AdminServicesImplTest {
 
         assertThat(response).isNotNull();
         assertThat(response.getRole()).isEqualTo(Role.ADMIN);
-        assertThat(response.getUsername()).isEqualTo(request.getUsername());
         assertThat(response.getFirstName()).isEqualTo(request.getFirstName());
         assertThat(response.getLastName()).isEqualTo(request.getLastName());
         assertThat(response.getId()).isNotNull();
