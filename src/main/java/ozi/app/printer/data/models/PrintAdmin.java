@@ -25,9 +25,6 @@ public class PrintAdmin {
     @Column(unique= true)
     private String email;
 
-    @Column(unique= true)
-    private String username;
-
     private Role role;
 
     private String password;
