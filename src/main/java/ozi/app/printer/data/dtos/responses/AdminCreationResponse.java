@@ -13,7 +13,5 @@ public class AdminCreationResponse {
 
     private String email;
 
-    private String username;
-
     private Role role;
 }
