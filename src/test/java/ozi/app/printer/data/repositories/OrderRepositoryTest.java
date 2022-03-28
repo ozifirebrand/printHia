@@ -80,7 +80,7 @@ class OrderRepositoryTest {
         List<PrintOrder> ordersByDate = repository.findByOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
 
         //assert
-//        assertThat(ordersByDate.size()).isEqualTo(2);
+        assertThat(ordersByDate.size()).isEqualTo(2);
         assertThat(ordersByDate.get(0).getOrderDate()).isEqualTo(ordersByDate.get(1).getOrderDate());
 
     }
