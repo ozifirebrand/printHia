@@ -56,13 +56,6 @@ public class AdminServicesImpl implements AdminServices {
     }
 
     @Override
-    public PrintAdmin getAdminByUsername(String username) throws BusinessLogicException{
-        PrintAdmin admin = adminRepository.findByUsername(username);
-        if ( admin == null ) throw new AdminException("This username cannot be empty!");
-        return admin;
-    }
-
-    @Override
     public List<PrintAdmin> getAllAdmins() throws AdminException {
         List<PrintAdmin> admins = adminRepository.findAll();
         if (admins.size()==0  ) throw new AdminException("There are no admins here!");

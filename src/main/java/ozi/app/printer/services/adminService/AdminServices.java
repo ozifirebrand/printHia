@@ -12,7 +12,6 @@ public interface AdminServices {
     AdminCreationResponse createAdmin (AdminCreationRequest request) throws AdminException, BusinessLogicException;
     PrintAdmin getAdminById(String id) throws AdminException, BusinessLogicException;
     PrintAdmin getAdminByEmail(String email) throws BusinessLogicException;
-    PrintAdmin getAdminByUsername(String username) throws BusinessLogicException;
     List<PrintAdmin> getAllAdmins() throws AdminException;
     boolean deleteAdminById(String id);
     boolean deleteAllAdmins() throws AdminException;
