@@ -22,9 +22,10 @@ public class PrintAdmin {
 
     private String phoneNumber;
 
-//    @Column(unique= true)
+    @Column(unique= true)
     private String email;
 
+    @Column(unique= true)
     private String username;
 
     private Role role;
