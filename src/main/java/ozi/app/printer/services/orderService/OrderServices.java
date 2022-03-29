@@ -13,12 +13,15 @@ import java.util.List;
 public interface OrderServices {
 
     OrderCreationResponse createOrder(OrderCreationRequest request) throws BusinessLogicException;
-    OrderCreationResponse getOrderById(String id) throws OrderException;
     boolean deleteAllOrders() throws OrderException;
-    boolean deleteOrderById(String id);
+    boolean deleteOrderById(String id) throws BusinessLogicException;
+    boolean deleteOrderByUserId(String userId);
+    void updateOrderDetails(String orderId, OrderCreationRequest request);
+    void updateOrderStatus(String orderId, OrderStatus status);
+    void updateOrderDeliverDate(String orderId, LocalDateTime date);
+    OrderCreationResponse getOrderById(String id) throws OrderException;
     List<PrintOrder> getAllOrders() throws OrderException;
     List<PrintOrder> getOrdersByDate(LocalDateTime dateTime);
     List<PrintOrder> getOrdersByStatus(OrderStatus status);
     List<PrintOrder> getOrdersByUserId(String userId);
-
 }

@@ -7,13 +7,10 @@ import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
-import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.repositories.OrderRepository;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.exceptions.OrderException;
 import ozi.app.printer.mapper.Mapper;
-import ozi.app.printer.services.userService.UserServices;
-import ozi.app.printer.services.userService.UserServicesImpl;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -26,23 +23,28 @@ public class OrderServicesImpl implements OrderServices {
 
     @Autowired
     private OrderRepository orderRepository;
+
     @Override
     public OrderCreationResponse createOrder(OrderCreationRequest request)
             throws BusinessLogicException {
-
-        List<PrintOrder> orders = getOrdersWith(request.getUserId());
-
-        setDateFor(request);
         validate(request);
         PrintOrder order = Mapper.map(request);
         setOtherDetailsFor(order);
-
         PrintOrder savedOrder = save(order);
-        UserServices userServices = new UserServicesImpl();
-        PrintUser user = userServices.getUserById(request.getUserId());
-        orders.add(order);
-        user.setOrders(orders);
         return Mapper.map(savedOrder);
+    }
+
+    private void validate(OrderCreationRequest request) throws BusinessLogicException {
+        setDateFor(request);
+        boolean orderDateIsEmpty= request.getOrderDate() == null;
+        boolean imageUrlIsEmpty= request.getImageUrl() == null;
+        boolean sizeIsEmpty = request.getSize()==0;
+        boolean quantityIsEmpty = request.getQuantity() == 0;
+        boolean userIdIsEmpty = request.getUserId()==null;
+
+        if ( orderDateIsEmpty || imageUrlIsEmpty|| sizeIsEmpty|| quantityIsEmpty || userIdIsEmpty ){
+            throw new OrderException("The given details are incomplete");
+        }
     }
 
     private void setOtherDetailsFor(PrintOrder order) {
@@ -65,21 +67,33 @@ public class OrderServicesImpl implements OrderServices {
         return orderRepository.save(order);
     }
 
-    private void validate(OrderCreationRequest request) throws BusinessLogicException {
-        boolean orderDateIsEmpty= request.getOrderDate() == null;
-        boolean imageUrlIsEmpty= request.getImageUrl() == null;
-        boolean sizeIsEmpty = request.getSize()==0;
-        boolean quantityIsEmpty = request.getQuantity() == 0;
 
-        if ( orderDateIsEmpty || imageUrlIsEmpty|| sizeIsEmpty|| quantityIsEmpty ){
-            throw new OrderException("The given details are incomplete");
-        }
+
+    @Override
+    public boolean deleteOrderById(String id) throws BusinessLogicException {
+        Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(id);
+        if ( optionalPrintOrder.isEmpty() )throw new BusinessLogicException("No such order exists!");
+        orderRepository.deleteById(id);
+        return true;
     }
 
     @Override
-    public boolean deleteOrderById(String id) {
-        orderRepository.deleteById(id);
-        return true;
+    public boolean deleteOrderByUserId(String userId) {
+        boolean isDeleted = orderRepository.deleteByUserId(userId);
+        return isDeleted;
+    }
+
+    @Override
+    public void updateOrderDetails(String orderId, OrderCreationRequest request) {
+
+    }
+
+    @Override
+    public void updateOrderStatus(String orderId, OrderStatus status) {
+    }
+
+    @Override
+    public void updateOrderDeliverDate(String orderId, LocalDateTime date) {
     }
 
     @Override
