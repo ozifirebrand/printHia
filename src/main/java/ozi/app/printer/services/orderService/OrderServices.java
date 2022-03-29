@@ -18,8 +18,8 @@ public interface OrderServices {
     boolean deleteOrderById(String id) throws BusinessLogicException;
     boolean deleteOrderByUserId(String userId) ;
     OrderCreationResponse updateOrderDetails(String orderId, OrderUpdateRequest request) throws BusinessLogicException;
-    OrderCreationResponse updateOrderStatus(String orderId, OrderStatus status);
-    OrderCreationResponse updateOrderDeliverDate(String orderId, LocalDateTime date);
+    OrderCreationResponse updateOrderStatus(String orderId, OrderStatus status) throws BusinessLogicException;
+    OrderCreationResponse updateOrderDeliverDate(String orderId, LocalDateTime date) throws BusinessLogicException;
     OrderCreationResponse getOrderById(String id) throws OrderException;
     List<PrintOrder> getAllOrders() throws OrderException;
     List<PrintOrder> getOrdersByDate(LocalDateTime dateTime);
