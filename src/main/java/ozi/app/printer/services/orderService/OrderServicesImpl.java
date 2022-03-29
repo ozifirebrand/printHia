@@ -80,7 +80,8 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public OrderCreationResponse updateOrderDetails(String orderId, OrderUpdateRequest request) throws BusinessLogicException {
+    public OrderCreationResponse updateOrderDetails(String orderId, OrderUpdateRequest request)
+            throws BusinessLogicException {
         Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(orderId);
         if ( optionalPrintOrder.isEmpty() ) throw new BusinessLogicException("There is no order with ID "+orderId+" here!");
         PrintOrder order = optionalPrintOrder.get();
@@ -93,7 +94,8 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public OrderCreationResponse updateOrderStatus(String orderId, OrderStatus status) throws BusinessLogicException {
+    public OrderCreationResponse updateOrderStatus(String orderId, OrderStatus status)
+            throws BusinessLogicException {
         Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(orderId);
         if ( optionalPrintOrder.isEmpty() ) throw new BusinessLogicException("There is no order with ID "+orderId+" here!");
         PrintOrder order = optionalPrintOrder.get();
@@ -104,7 +106,8 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public OrderCreationResponse updateOrderDeliverDate(String orderId, LocalDateTime date) throws BusinessLogicException {
+    public OrderCreationResponse updateOrderDeliverDate(String orderId, LocalDateTime date)
+            throws BusinessLogicException {
         Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(orderId);
         if ( optionalPrintOrder.isEmpty() ) throw new BusinessLogicException("There is no order with ID "+orderId+" here!");
         PrintOrder order = optionalPrintOrder.get();
@@ -146,6 +149,8 @@ public class OrderServicesImpl implements OrderServices {
 
     @Override
     public List<PrintOrder> getOrdersByUserId(String userId) {
+
+
         return orderRepository.findPrintOrderByUserId(userId);
     }
 
