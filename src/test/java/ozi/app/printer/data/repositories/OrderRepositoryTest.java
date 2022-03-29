@@ -23,6 +23,9 @@ class OrderRepositoryTest {
     @Autowired
     private OrderRepository repository;
 
+    @Mock
+    private OrderRepository mockRepository;
+
     private PrintOrder order;
     private PrintOrder savedOrder;
     private PrintOrder savedOrder1;
@@ -89,12 +92,11 @@ class OrderRepositoryTest {
     @Test
     public void deleteByUserId(){
         //given
-        when(mockRepository.deleteByUserId("aUserId")).thenReturn(true);
+        when(mockRepository.deleteByUserId("aUserId")).thenReturn(1);
         mockRepository.deleteByUserId("aUserId");
-        verify(mockRepository,times(1));
+        verify(mockRepository,times(1)).deleteByUserId("aUserId");
     }
-    @Mock
-    private OrderRepository mockRepository;
+
     @Test
     public void findPrintOrderByUserId(){
         //given @setup...
@@ -104,7 +106,7 @@ class OrderRepositoryTest {
         //when
         when(mockRepository.findPrintOrderByUserId("437uai82798")).thenReturn(orders);
         orders = mockRepository.findPrintOrderByUserId("437uai82798");
-        verify(mockRepository,times(1));
+        verify(mockRepository,times(1)).findPrintOrderByUserId("437uai82798");
 
     }
 }
