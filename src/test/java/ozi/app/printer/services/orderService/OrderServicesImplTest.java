@@ -243,7 +243,28 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void deleteAllOrders() {
+    public void deleteAllOrders() throws BusinessLogicException {
+        //given
+        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
+        orderCreationRequest1.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
+        orderCreationRequest1.setSize(1.0);
+        orderCreationRequest1.setQuantity(1);
+        orderCreationRequest1.setImageUrl("imaeurl.com");
+        orderCreationRequest1.setUserId("anId");
+        String userId = "myUserId";
+        orderCreationRequest.setUserId(userId);
+
+        orderServices.createOrder(orderCreationRequest1);
+        orderServices.createOrder(orderCreationRequest);
+
+        //when
+        boolean isDeleted = orderServices.deleteAllOrders();
+
+        //assert
+        assertThat(isDeleted).isTrue();
+        assertThatThrownBy(()->orderServices.getAllOrders())
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("There are no orders here!");
     }
 
     @Test
