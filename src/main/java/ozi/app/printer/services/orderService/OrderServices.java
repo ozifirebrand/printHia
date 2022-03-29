@@ -16,9 +16,9 @@ public interface OrderServices {
     boolean deleteAllOrders() throws OrderException;
     boolean deleteOrderById(String id) throws BusinessLogicException;
     boolean deleteOrderByUserId(String userId) ;
-    void updateOrderDetails(String orderId, OrderCreationRequest request);
-    void updateOrderStatus(String orderId, OrderStatus status);
-    void updateOrderDeliverDate(String orderId, LocalDateTime date);
+    OrderCreationResponse updateOrderDetails(String orderId, OrderCreationRequest request) throws BusinessLogicException;
+    OrderCreationResponse updateOrderStatus(String orderId, OrderStatus status);
+    OrderCreationResponse updateOrderDeliverDate(String orderId, LocalDateTime date);
     OrderCreationResponse getOrderById(String id) throws OrderException;
     List<PrintOrder> getAllOrders() throws OrderException;
     List<PrintOrder> getOrdersByDate(LocalDateTime dateTime);

@@ -57,11 +57,6 @@ public class OrderServicesImpl implements OrderServices {
         request.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
     }
 
-    private List<PrintOrder> getOrdersWith(String userId) {
-
-        return orderRepository.findPrintOrderByUserId(userId);
-    }
-
     private PrintOrder save(PrintOrder order) {
 
         return orderRepository.save(order);
@@ -86,16 +81,24 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public void updateOrderDetails(String orderId, OrderCreationRequest request) {
+    public OrderCreationResponse updateOrderDetails(String orderId, OrderCreationRequest request) throws BusinessLogicException {
+        Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(orderId);
+        if ( optionalPrintOrder.isEmpty() ) throw new BusinessLogicException("There is no order with ID "+orderId+" here!");
+        PrintOrder order = optionalPrintOrder.get();
+        order.setSize(request.getSize());
+        order.setQuantity(request.getQuantity());
 
+        return Mapper.map(order);
     }
 
     @Override
-    public void updateOrderStatus(String orderId, OrderStatus status) {
+    public OrderCreationResponse updateOrderStatus(String orderId, OrderStatus status) {
+        return null;
     }
 
     @Override
-    public void updateOrderDeliverDate(String orderId, LocalDateTime date) {
+    public OrderCreationResponse updateOrderDeliverDate(String orderId, LocalDateTime date) {
+        return null;
     }
 
     @Override
