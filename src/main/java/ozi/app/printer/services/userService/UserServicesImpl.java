@@ -11,7 +11,6 @@ import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.repositories.UserRepository;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.mapper.Mapper;
-import ozi.app.printer.services.orderService.OrderServices;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,9 +19,6 @@ import java.util.Optional;
 public class UserServicesImpl implements UserServices {
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private OrderServices orderServices;
 
     @Override
     public UserCreationResponse createUser(UserCreationRequest request) throws BusinessLogicException {
@@ -35,12 +31,11 @@ public class UserServicesImpl implements UserServices {
 
     private void validateRequestDetails(UserCreationRequest request) throws BusinessLogicException {
         boolean emailIsEmpty= request.getEmail() == null;
-        boolean usernameIsEmpty= request.getUsername() == null;
         boolean firstNameIsEmpty = request.getFirstName() == null;
         boolean lastNameIsEmpty = request.getLastName() == null;
         boolean passwordIsEmpty = request.getPassword() == null;
 
-        if ( emailIsEmpty || usernameIsEmpty|| firstNameIsEmpty|| lastNameIsEmpty|| passwordIsEmpty ){
+        if ( emailIsEmpty || firstNameIsEmpty|| lastNameIsEmpty|| passwordIsEmpty ){
             throw new BusinessLogicException("Incomplete details");
         }
     }
