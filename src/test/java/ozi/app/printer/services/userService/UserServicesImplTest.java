@@ -191,10 +191,11 @@ class UserServicesImplTest {
         assertThat(userServices.getAllUsers().size()).isEqualTo(2);
 
         //when
-        userServices.deleteAllUsers();
+        boolean isAllDeleted = userServices.deleteAllUsers();
 
         //assert
         assertThat(userServices.getAllUsers().size()).isEqualTo(0);
+        assertThat(isAllDeleted).isTrue();
     }
 
     @Test
@@ -221,5 +222,25 @@ class UserServicesImplTest {
         assertThat(response.getFirstName()).isEqualTo(request.getFirstName());
         assertThat(response.getLastName()).isEqualTo(request.getLastName());
         assertThat(response.getId()).isNotNull();
+    }
+
+    @Test
+    public void testUpdateUserRole() throws BusinessLogicException {
+        //given...
+        request.setEmail("firstname@mail03.com");
+        UserCreationResponse response = userServices.createUser(request);
+
+        //when
+        Role role = response.getRole();
+
+        //assert
+        assertThat(role).isEqualTo(Role.USER);
+
+        //when
+        userServices.updateUserRole(response.getId(), Role.ADMIN);
+
+        //assert
+        assertThat(userServices.getUserById(response.getId()).getRole()).isEqualTo(Role.ADMIN);
+
     }
 }
