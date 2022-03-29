@@ -86,6 +86,13 @@ class OrderRepositoryTest {
 
     }
 
+    @Test
+    public void deleteByUserId(){
+        //given
+        when(mockRepository.deleteByUserId("aUserId")).thenReturn(true);
+        mockRepository.deleteByUserId("aUserId");
+        verify(mockRepository,times(1));
+    }
     @Mock
     private OrderRepository mockRepository;
     @Test
