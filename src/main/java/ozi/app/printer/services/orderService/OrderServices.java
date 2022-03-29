@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface OrderServices {
 
-    OrderCreationResponse createOrder(OrderCreationRequest request, String userId) throws BusinessLogicException;
+    OrderCreationResponse createOrder(OrderCreationRequest request) throws BusinessLogicException;
     OrderCreationResponse getOrderById(String id) throws OrderException;
     boolean deleteAllOrders() throws OrderException;
     boolean deleteOrderById(String id);

@@ -7,10 +7,13 @@ import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
+import ozi.app.printer.data.models.PrintUser;
 import ozi.app.printer.data.repositories.OrderRepository;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.exceptions.OrderException;
 import ozi.app.printer.mapper.Mapper;
+import ozi.app.printer.services.userService.UserServices;
+import ozi.app.printer.services.userService.UserServicesImpl;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -20,13 +23,14 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class OrderServicesImpl implements OrderServices {
+
     @Autowired
     private OrderRepository orderRepository;
     @Override
-    public OrderCreationResponse createOrder(OrderCreationRequest request, String userId)
+    public OrderCreationResponse createOrder(OrderCreationRequest request)
             throws BusinessLogicException {
 
-        List<PrintOrder> orders = getOrdersWith(userId);
+        List<PrintOrder> orders = getOrdersWith(request.getUserId());
 
         setDateFor(request);
         validate(request);
@@ -34,7 +38,10 @@ public class OrderServicesImpl implements OrderServices {
         setOtherDetailsFor(order);
 
         PrintOrder savedOrder = save(order);
+        UserServices userServices = new UserServicesImpl();
+        PrintUser user = userServices.getUserById(request.getUserId());
         orders.add(order);
+        user.setOrders(orders);
         return Mapper.map(savedOrder);
     }
 
@@ -48,7 +55,8 @@ public class OrderServicesImpl implements OrderServices {
         request.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
     }
 
-    private List<PrintOrder> getOrdersWith(String userId) throws BusinessLogicException {
+    private List<PrintOrder> getOrdersWith(String userId) {
+
         return orderRepository.findPrintOrderByUserId(userId);
     }
 
@@ -106,7 +114,7 @@ public class OrderServicesImpl implements OrderServices {
 
     @Override
     public List<PrintOrder> getOrdersByUserId(String userId) {
-        return null;
+        return orderRepository.findPrintOrderByUserId(userId);
     }
 
     @Override
