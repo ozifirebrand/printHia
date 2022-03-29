@@ -2,7 +2,11 @@ package ozi.app.printer.data.dtos.responses;
 
 import lombok.Data;
 import ozi.app.printer.data.models.OrderStatus;
+import ozi.app.printer.data.models.PrintOrder;
+
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 public class OrderCreationResponse {
     private String id;
@@ -20,5 +24,7 @@ public class OrderCreationResponse {
     private final boolean ordered= true;
 
     private OrderStatus orderStatus;
+
+    private List<PrintOrder> orders;
 
 }

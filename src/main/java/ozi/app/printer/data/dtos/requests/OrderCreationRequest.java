@@ -14,4 +14,6 @@ public class OrderCreationRequest {
     private int quantity;
 
     private LocalDateTime orderDate;
+
+    private String userId;
 }
