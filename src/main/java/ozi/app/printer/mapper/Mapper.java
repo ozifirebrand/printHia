@@ -18,7 +18,6 @@ public class Mapper {
         PrintUser user = new PrintUser();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
-        user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setOrders(new ArrayList<>());
@@ -31,7 +30,6 @@ public class Mapper {
         UserCreationResponse response = new UserCreationResponse();
 
         response.setEmail(user.getEmail());
-        response.setUsername(user.getUsername());
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
         response.setId(user.getId());
