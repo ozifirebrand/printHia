@@ -8,6 +8,7 @@ import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.dtos.responses.UserCreationResponse;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.data.models.PrintUser;
+import ozi.app.printer.data.models.Role;
 import ozi.app.printer.data.repositories.UserRepository;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.mapper.Mapper;
@@ -41,8 +42,8 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public PrintUser getUserById(String id) throws BusinessLogicException {
-        Optional<PrintUser> optionalPrintUser = userRepository.findById(id);
+    public PrintUser getUserById(String userId) throws BusinessLogicException {
+        Optional<PrintUser> optionalPrintUser = userRepository.findById(userId);
         if ( optionalPrintUser.isEmpty() ){
             throw new BusinessLogicException("This user does not exist!");
         }
@@ -64,29 +65,27 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public boolean deleteUserById(String id) {
-        userRepository.deleteById(id);
-        return userRepository.findById(id).isEmpty();
+    public boolean deleteUserById(String userId) {
+        userRepository.deleteById(userId);
+        return userRepository.findById(userId).isEmpty();
     }
 
     @Override
-    public void deleteAllUsers() throws BusinessLogicException {
+    public boolean deleteAllUsers() throws BusinessLogicException {
         if ( userRepository.findAll().size() == 0  ){
             throw new BusinessLogicException("There are no users in here!");
         }
         userRepository.deleteAll();
-        userRepository.findAll();
+        return userRepository.findAll().size()==0;
     }
 
     @Override
-    public OrderCreationResponse makeOrder(OrderCreationRequest request, String id) {
-
-        return null;
+    public void updateUserRole(String userId, Role role) {
+        Optional<PrintUser> optionalPrintUser =userRepository.findById(userId);
+        PrintUser printUser = new PrintUser();
+        if ( optionalPrintUser.isPresent() ) printUser = optionalPrintUser.get();
+        printUser.setRole(role);
+        userRepository.save(printUser);
     }
 
-    @Override
-    public List<PrintOrder> getAllOrders(String userId) {
-        PrintUser foundUser = userRepository.getById(userId);
-        return foundUser.getOrders();
-    }
 }
