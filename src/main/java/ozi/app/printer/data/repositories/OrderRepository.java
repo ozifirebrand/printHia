@@ -14,4 +14,6 @@ public interface OrderRepository extends JpaRepository<PrintOrder, String> {
     List<PrintOrder> findByOrderStatus(OrderStatus status);
 
     List<PrintOrder> findPrintOrderByUserId(String userId);
+
+    boolean deleteByUserId(String userId);
 }
