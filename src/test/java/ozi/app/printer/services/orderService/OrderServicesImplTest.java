@@ -14,6 +14,7 @@ import ozi.app.printer.exceptions.BusinessLogicException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -23,9 +24,7 @@ class OrderServicesImplTest {
     @Mock
     private OrderServices mockOrderServices;
 
-
     private OrderCreationRequest orderCreationRequest;
-
 
     @BeforeEach
     void setUp() {
@@ -56,12 +55,12 @@ class OrderServicesImplTest {
 
     @Autowired
     private OrderServices orderServices;
+
     @Test
     public void testIncompleteDetails_ThrowException(){
 
         //given
         orderCreationRequest.setUserId(null);
-        log.info("{}",orderCreationRequest.getUserId());
 
         //when
         //assert
@@ -70,13 +69,28 @@ class OrderServicesImplTest {
                 .isInstanceOf(BusinessLogicException.class)
                 .hasMessage("The given details are incomplete");
     }
+
     @Test
-    public void deleteOrderById() {
+    public void deleteOrderById() throws BusinessLogicException {
+        //given
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
+
+        //when
+        boolean orderIsDeleted = orderServices.deleteOrderById(response.getId());
+
+        //assert
+        assertThat(orderIsDeleted).isTrue();
 
     }
 
     @Test
     public void deleteOrderByUserId() {
+    }
+
+    @Test
+    public void testInvalidId_ThrowException(){
+
+
     }
 
     @Test
