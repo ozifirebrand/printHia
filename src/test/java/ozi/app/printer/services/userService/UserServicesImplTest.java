@@ -26,6 +26,10 @@ class UserServicesImplTest {
     @BeforeEach
     void setUp() {
        request = new UserCreationRequest();
+
+        request.setFirstName("firstname");
+        request.setLastName("lastname");
+        request.setPassword("password");
     }
 
     @Test
@@ -33,10 +37,6 @@ class UserServicesImplTest {
 
         //given
         request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
         //when
         UserCreationResponse response=userServices.createUser(request);
         //assert
@@ -51,10 +51,8 @@ class UserServicesImplTest {
     @Test
     public void assert_IncompleteUserDetails_BeforeSavingUser_MissingPassword() {
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
+        request.setEmail("firstname@mail1.com");
+        request.setPassword(null);
         //when
         //then
         assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogicException.class).hasMessage("Incomplete details");
@@ -63,10 +61,8 @@ class UserServicesImplTest {
     @Test
     public void assert_IncompleteUserDetails_BeforeSavingUser_MissingLastname() {
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setPassword("password");
+        request.setEmail("firstname@mail2.com");
+        request.setLastName(null);
         //when
         //then
         assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogicException.class).hasMessage("Incomplete details");
@@ -75,10 +71,8 @@ class UserServicesImplTest {
     @Test
     public void assert_IncompleteUserDetails_BeforeSavingUser_MissingFirstname(){
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setLastName("lastname");
-        request.setPassword("password");
+        request.setEmail("firstname@mail3.com");
+        request.setFirstName(null);
         //when
         //then
         assertThatThrownBy(()-> userServices.createUser(request)).isInstanceOf(BusinessLogicException.class).hasMessage("Incomplete details");
@@ -87,11 +81,7 @@ class UserServicesImplTest {
     @Test
     void getUserById() throws BusinessLogicException {
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
+        request.setEmail("firstname@mail4.com");
         UserCreationResponse response = userServices.createUser(request);
         //when
         PrintUser user = userServices.getUserById(response.getId());
@@ -115,11 +105,7 @@ class UserServicesImplTest {
     @Test
     void getUserByEmail() throws BusinessLogicException {
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
+        request.setEmail("firstname@mail5.com");
         UserCreationResponse response = userServices.createUser(request);
 
         //when
@@ -156,15 +142,10 @@ class UserServicesImplTest {
     @Test
     public void getAllUsers() throws BusinessLogicException {
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
+        request.setEmail("firstname@mail6.com");
 
         UserCreationRequest request1 = new UserCreationRequest();
-        request1.setEmail("firstname1@mail.com");
-        request1.setUsername("username1");
+        request1.setEmail("firstname1@mail7.com");
         request1.setFirstName("firstname1");
         request1.setLastName("lastname1");
         request1.setPassword("password1");
@@ -184,11 +165,7 @@ class UserServicesImplTest {
     @Test
     public void deleteUserById() throws BusinessLogicException {
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
+        request.setEmail("firstname@mail8.com");
         UserCreationResponse response = userServices.createUser(request);
 
         //when
@@ -201,17 +178,12 @@ class UserServicesImplTest {
     @Test
     public void deleteAllUsers() throws BusinessLogicException {
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
+        request.setEmail("firstname@mail9.com");
         UserCreationRequest request1 = new UserCreationRequest();
-        request1.setEmail("firstname1@mail.com");
-        request1.setUsername("username1");
-        request1.setFirstName("firstname1");
-        request1.setLastName("lastname1");
-        request1.setPassword("password1");
+        request1.setEmail("firstname1@mail01.com");
+        request1.setFirstName("firstname2");
+        request1.setLastName("lastname2");
+        request1.setPassword("password3");
         //when
         userServices.createUser(request);
         userServices.createUser(request1);
@@ -239,18 +211,13 @@ class UserServicesImplTest {
     public void test_UserRoleIsUser() throws BusinessLogicException {
 
         //given
-        request.setEmail("firstname@mail.com");
-        request.setUsername("username");
-        request.setFirstName("firstname");
-        request.setLastName("lastname");
-        request.setPassword("password");
+        request.setEmail("firstname@mail02.com");
         //when
         UserCreationResponse response = userServices.createUser(request);
 
         //assert
         assertThat(response).isNotNull();
         assertThat(response.getRole()).isEqualTo(Role.USER);
-        assertThat(response.getUsername()).isEqualTo(request.getUsername());
         assertThat(response.getFirstName()).isEqualTo(request.getFirstName());
         assertThat(response.getLastName()).isEqualTo(request.getLastName());
         assertThat(response.getId()).isNotNull();
