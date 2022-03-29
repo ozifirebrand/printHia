@@ -44,6 +44,7 @@ public class Mapper {
         order.setImageUrl(request.getImageUrl());
         order.setSize(request.getSize());
         order.setQuantity(request.getQuantity());
+        order.setUserId(request.getUserId());
         return order;
     }
 
