@@ -152,7 +152,7 @@ class AdminServicesImplTest {
     }
 
     @Test
-    public void test_IfEmptyList_ThrowError() throws AdminException {
+    public void test_IfEmptyList_ThrowError() throws BusinessLogicException {
         //given...
         services.deleteAllAdmins();
         //when...
