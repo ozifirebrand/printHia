@@ -73,7 +73,7 @@ class OrderServicesImplTest {
     @Test
     public void deleteOrderById() throws BusinessLogicException {
         //given
-        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
+        OrderCreationResponse response =orderServices.createOrder(orderCreationRequest);
 
         //when
         boolean orderIsDeleted = orderServices.deleteOrderById(response.getId());
@@ -84,13 +84,26 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void deleteOrderByUserId() {
+    public void testInvalidId_ThrowException() throws BusinessLogicException {
+        //given
+        //when
+        //assert
+        assertThatThrownBy(()->orderServices
+                .deleteOrderById("mine"))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("No such order exists!");
+
     }
 
     @Test
-    public void testInvalidId_ThrowException(){
-
-
+    public void deleteOrderByUserId() {
+        //given
+        String userId = "aUserId";
+        //when
+        when(mockOrderServices.deleteOrderByUserId("aUserId")).thenReturn(true);
+        boolean isDeleted = mockOrderServices.deleteOrderByUserId("aUserId");
+        verify(mockOrderServices, times(1));
+        assertThat(isDeleted).isTrue();
     }
 
     @Test
