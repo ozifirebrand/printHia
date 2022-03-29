@@ -20,18 +20,14 @@ public class PrintUser {
     private String firstName;
     private String lastName;
 
-//    @Column(unique = true)
-    private String username;
-
     private String password;
 
-//    @Column(unique = true)
+    @Column(unique = true)
     private String email;
 
     private Role role;
 
     @OneToMany
     @Fetch(FetchMode.JOIN)
-
     private List<PrintOrder> orders;
 }
