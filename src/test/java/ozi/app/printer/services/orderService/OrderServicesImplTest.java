@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
+import ozi.app.printer.data.dtos.requests.OrderUpdateRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.exceptions.BusinessLogicException;
 
@@ -122,10 +123,10 @@ class OrderServicesImplTest {
         OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
 
         //when
-        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
-        orderCreationRequest1.setQuantity(9);
-        orderCreationRequest1.setSize(22);
-        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest1);
+        OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest();
+        orderUpdateRequest.setQuantity(9);
+        orderUpdateRequest.setSize(22);
+        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderUpdateRequest);
 
         //assert
         assertThat(response1.getQuantity()).isEqualTo(9);
@@ -143,9 +144,9 @@ class OrderServicesImplTest {
         OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
 
         //when
-        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
-        orderCreationRequest1.setQuantity(9);
-        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest1);
+        OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest();
+        orderUpdateRequest.setQuantity(9);
+        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderUpdateRequest);
 
         //assert
         assertThat(response1.getQuantity()).isEqualTo(9);
@@ -163,9 +164,9 @@ class OrderServicesImplTest {
         OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
 
         //when
-        OrderCreationRequest orderCreationRequest2 = new OrderCreationRequest();
-        orderCreationRequest2.setSize(88);
-        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest2);
+        OrderUpdateRequest orderUpdateRequest2 = new OrderUpdateRequest();
+        orderUpdateRequest2.setSize(88);
+        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderUpdateRequest2);
 
         //assert
         assertThat(response1.getQuantity()).isEqualTo(12);
@@ -184,11 +185,11 @@ class OrderServicesImplTest {
 
     //when
 
-        OrderCreationRequest orderCreationRequest3 = new OrderCreationRequest();
+        OrderUpdateRequest orderUpdateRequest3 = new OrderUpdateRequest();
 
-        orderCreationRequest3.setQuantity(0);
-        orderCreationRequest3.setSize(0);
-        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest3);
+        orderUpdateRequest3.setQuantity(0);
+        orderUpdateRequest3.setSize(0);
+        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderUpdateRequest3);
 
         //assert
         assertThat(response1.getQuantity()).isEqualTo(12);
