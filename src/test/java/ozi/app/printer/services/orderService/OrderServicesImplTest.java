@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.requests.OrderUpdateRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
+import ozi.app.printer.data.models.OrderStatus;
+import ozi.app.printer.data.models.Role;
 import ozi.app.printer.exceptions.BusinessLogicException;
 
 import java.time.LocalDateTime;
@@ -199,18 +201,45 @@ class OrderServicesImplTest {
         assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
         assertThat(response1.getOrderStatus()).isEqualTo(response.getOrderStatus());
         assertThat(response1.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
+    }
 
+    @Test
+    public void updateOrderStatus() throws BusinessLogicException {
+        //given
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
+
+        //when
+        OrderCreationResponse response1 = orderServices.updateOrderStatus(response.getId(), OrderStatus.DELIVERED);
+
+        //assert
+        assertThat(response1.getQuantity()).isEqualTo(response.getQuantity());
+        assertThat(response1.getId()).isEqualTo(response.getId());
+        assertThat(response1.getOrderDate()).isEqualTo(response.getOrderDate());
+        assertThat(response1.getSize()).isEqualTo(response.getSize());
+        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
+        assertThat(response1.getOrderStatus()).isEqualTo(OrderStatus.DELIVERED);
+        assertThat(response1.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
 
 
     }
 
     @Test
-    public void updateOrderStatus() {
+    public void updateOrderDeliverDate() throws BusinessLogicException {
+        //given
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
 
-    }
+        //when
+        OrderCreationResponse response1 = orderServices.updateOrderDeliverDate(response.getId(),
+                response.getOrderDate().plusDays(5).truncatedTo(ChronoUnit.DAYS));
 
-    @Test
-    public void updateOrderDeliverDate() {
+        //assert
+        assertThat(response1.getQuantity()).isEqualTo(response.getQuantity());
+        assertThat(response1.getId()).isEqualTo(response.getId());
+        assertThat(response1.getSize()).isEqualTo(response.getSize());
+        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
+        assertThat(response1.getOrderStatus()).isEqualTo(response.getOrderStatus());
+        assertThat(response1.getDeliveryDate()).isEqualTo(response.getOrderDate().plusDays(5).truncatedTo(ChronoUnit.DAYS));
+
     }
 
     @Test
