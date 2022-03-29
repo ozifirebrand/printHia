@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
@@ -13,13 +14,14 @@ import ozi.app.printer.exceptions.BusinessLogicException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Slf4j
 class OrderServicesImplTest {
     @Mock
-    private OrderServices orderServices;
+    private OrderServices mockOrderServices;
 
 
     private OrderCreationRequest orderCreationRequest;
@@ -32,6 +34,8 @@ class OrderServicesImplTest {
         orderCreationRequest.setSize(14.0);
         orderCreationRequest.setQuantity(12);
         orderCreationRequest.setImageUrl("imageurl.com");
+        String userId = "myUserId";
+        orderCreationRequest.setUserId(userId);
     }
 
     @AfterEach
@@ -41,20 +45,34 @@ class OrderServicesImplTest {
     @Test
     public void createOrder() throws BusinessLogicException {
         //given
-        String userId = "myUserId";
-        orderCreationRequest.setUserId(userId);
 
         OrderCreationResponse orderCreationResponse = new OrderCreationResponse();
 
         //when
-        when(orderServices.createOrder(orderCreationRequest)).thenReturn(orderCreationResponse);
-        orderCreationResponse = orderServices.createOrder(orderCreationRequest);
-        verify(orderServices, times(1));
-        log.info("{}",orderServices.getAllOrders());
+        when(mockOrderServices.createOrder(orderCreationRequest)).thenReturn(orderCreationResponse);
+        orderCreationResponse = mockOrderServices.createOrder(orderCreationRequest);
+        verify(mockOrderServices, times(1));
     }
 
+    @Autowired
+    private OrderServices orderServices;
+    @Test
+    public void testIncompleteDetails_ThrowException(){
+
+        //given
+        orderCreationRequest.setUserId(null);
+        log.info("{}",orderCreationRequest.getUserId());
+
+        //when
+        //assert
+        assertThatThrownBy
+                (()->orderServices.createOrder(orderCreationRequest))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("The given details are incomplete");
+    }
     @Test
     public void deleteOrderById() {
+
     }
 
     @Test
