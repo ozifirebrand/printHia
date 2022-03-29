@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
+import ozi.app.printer.data.dtos.requests.OrderUpdateRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
@@ -62,8 +63,6 @@ public class OrderServicesImpl implements OrderServices {
         return orderRepository.save(order);
     }
 
-
-
     @Override
     public boolean deleteOrderById(String id) throws BusinessLogicException {
         Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(id);
@@ -81,7 +80,7 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public OrderCreationResponse updateOrderDetails(String orderId, OrderCreationRequest request) throws BusinessLogicException {
+    public OrderCreationResponse updateOrderDetails(String orderId, OrderUpdateRequest request) throws BusinessLogicException {
         Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(orderId);
         if ( optionalPrintOrder.isEmpty() ) throw new BusinessLogicException("There is no order with ID "+orderId+" here!");
         PrintOrder order = optionalPrintOrder.get();

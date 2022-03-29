@@ -1,6 +1,7 @@
 package ozi.app.printer.services.orderService;
 
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
+import ozi.app.printer.data.dtos.requests.OrderUpdateRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
@@ -16,7 +17,7 @@ public interface OrderServices {
     boolean deleteAllOrders() throws OrderException;
     boolean deleteOrderById(String id) throws BusinessLogicException;
     boolean deleteOrderByUserId(String userId) ;
-    OrderCreationResponse updateOrderDetails(String orderId, OrderCreationRequest request) throws BusinessLogicException;
+    OrderCreationResponse updateOrderDetails(String orderId, OrderUpdateRequest request) throws BusinessLogicException;
     OrderCreationResponse updateOrderStatus(String orderId, OrderStatus status);
     OrderCreationResponse updateOrderDeliverDate(String orderId, LocalDateTime date);
     OrderCreationResponse getOrderById(String id) throws OrderException;
