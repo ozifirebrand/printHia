@@ -90,14 +90,6 @@ class OrderRepositoryTest {
     }
 
     @Test
-    public void deleteByUserId(){
-        //given
-        when(mockRepository.deleteByUserId("aUserId")).thenReturn(1);
-        mockRepository.deleteByUserId("aUserId");
-        verify(mockRepository,times(1)).deleteByUserId("aUserId");
-    }
-
-    @Test
     public void findPrintOrderByUserId(){
         //given @setup...
 

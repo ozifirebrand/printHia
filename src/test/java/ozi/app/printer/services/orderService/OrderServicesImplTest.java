@@ -84,7 +84,7 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void testInvalidId_ThrowException() throws BusinessLogicException {
+    public void testInvalidId_ThrowException() {
         //given
         //when
         //assert
@@ -96,7 +96,7 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void deleteOrderByUserId() {
+    public void deleteOrderByUserId() throws BusinessLogicException {
         //given
         String userId = "aUserId";
         //when
@@ -104,6 +104,15 @@ class OrderServicesImplTest {
         boolean isDeleted = mockOrderServices.deleteOrderByUserId("aUserId");
         verify(mockOrderServices, times(1));
         assertThat(isDeleted).isTrue();
+    }
+
+    @Test
+    public void testInvalidUserId_ThrowException() throws BusinessLogicException {
+        //given
+        //when
+        boolean isDeleted = orderServices.deleteOrderByUserId("anInvalidId");
+        //assert
+        assertThat(isDeleted).isFalse();
     }
 
     @Test
