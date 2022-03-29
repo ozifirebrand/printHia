@@ -26,6 +26,7 @@ class OrderServicesImplTest {
 
     private OrderCreationRequest orderCreationRequest;
 
+
     @BeforeEach
     void setUp() {
         orderCreationRequest = new OrderCreationRequest();
@@ -49,8 +50,8 @@ class OrderServicesImplTest {
 
         //when
         when(mockOrderServices.createOrder(orderCreationRequest)).thenReturn(orderCreationResponse);
-        orderCreationResponse = mockOrderServices.createOrder(orderCreationRequest);
-        verify(mockOrderServices, times(1));
+        mockOrderServices.createOrder(orderCreationRequest);
+        verify(mockOrderServices, times(1)).createOrder(orderCreationRequest);
     }
 
     @Autowired
@@ -96,18 +97,18 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void deleteOrderByUserId() throws BusinessLogicException {
+    public void deleteOrderByUserId() {
         //given
         String userId = "aUserId";
         //when
-        when(mockOrderServices.deleteOrderByUserId("aUserId")).thenReturn(true);
-        boolean isDeleted = mockOrderServices.deleteOrderByUserId("aUserId");
-        verify(mockOrderServices, times(1));
+        when(mockOrderServices.deleteOrderByUserId(userId)).thenReturn(true);
+        boolean isDeleted = mockOrderServices.deleteOrderByUserId(userId);
+        verify(mockOrderServices, times(1)).deleteOrderByUserId(userId);
         assertThat(isDeleted).isTrue();
     }
 
     @Test
-    public void testInvalidUserId_ThrowException() throws BusinessLogicException {
+    public void testInvalidUserId_ThrowException() {
         //given
         //when
         boolean isDeleted = orderServices.deleteOrderByUserId("anInvalidId");
@@ -116,7 +117,24 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void updateOrderDetails() {
+    public void updateOrderDetails() throws BusinessLogicException {
+        //given
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
+
+        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
+        //when
+        orderCreationRequest1.setQuantity(9);
+        orderCreationRequest1.setSize(22);
+        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest1);
+
+        //assert
+        assertThat(response1.getQuantity()).isEqualTo(9);
+        assertThat(response1.getId()).isEqualTo(response.getId());
+        assertThat(response1.getOrderDate()).isEqualTo(response.getOrderDate());
+        assertThat(response1.getSize()).isEqualTo(22);
+        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
+        assertThat(response1.getOrderStatus()).isEqualTo(response.getOrderStatus());
+        assertThat(response1.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
     }
 
     @Test
