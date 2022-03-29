@@ -121,8 +121,8 @@ class OrderServicesImplTest {
         //given
         OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
 
-        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
         //when
+        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
         orderCreationRequest1.setQuantity(9);
         orderCreationRequest1.setSize(22);
         OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest1);
@@ -138,7 +138,74 @@ class OrderServicesImplTest {
     }
 
     @Test
+    public void if_updateDetailIsNullOrEmpty_DetailDoesNotChangeInDB() throws BusinessLogicException {
+        //given
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
+
+        //when
+        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
+        orderCreationRequest1.setQuantity(9);
+        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest1);
+
+        //assert
+        assertThat(response1.getQuantity()).isEqualTo(9);
+        assertThat(response1.getId()).isEqualTo(response.getId());
+        assertThat(response1.getOrderDate()).isEqualTo(response.getOrderDate());
+        assertThat(response1.getSize()).isEqualTo(14);
+        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
+        assertThat(response1.getOrderStatus()).isEqualTo(response.getOrderStatus());
+        assertThat(response1.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
+    }
+
+    @Test
+    public void test_if_updateDetailIsNullOrEmpty_DetailDoesNotChangeInDB() throws BusinessLogicException {
+        //given
+        OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
+
+        //when
+        OrderCreationRequest orderCreationRequest2 = new OrderCreationRequest();
+        orderCreationRequest2.setSize(88);
+        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest2);
+
+        //assert
+        assertThat(response1.getQuantity()).isEqualTo(12);
+        assertThat(response1.getId()).isEqualTo(response.getId());
+        assertThat(response1.getOrderDate()).isEqualTo(response.getOrderDate());
+        assertThat(response1.getSize()).isEqualTo(88);
+        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
+        assertThat(response1.getOrderStatus()).isEqualTo(response.getOrderStatus());
+        assertThat(response1.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
+    }
+
+    @Test
+    public void test_AllUpdateDetailIsNullOrEmpty_DetailDoesNotChangeInDB() throws BusinessLogicException {
+    //given
+    OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
+
+    //when
+
+        OrderCreationRequest orderCreationRequest3 = new OrderCreationRequest();
+
+        orderCreationRequest3.setQuantity(0);
+        orderCreationRequest3.setSize(0);
+        OrderCreationResponse response1 = orderServices.updateOrderDetails(response.getId(), orderCreationRequest3);
+
+        //assert
+        assertThat(response1.getQuantity()).isEqualTo(12);
+        assertThat(response1.getId()).isEqualTo(response.getId());
+        assertThat(response1.getOrderDate()).isEqualTo(response.getOrderDate());
+        assertThat(response1.getSize()).isEqualTo(14);
+        assertThat(response1.getImageUrl()).isEqualTo(response.getImageUrl());
+        assertThat(response1.getOrderStatus()).isEqualTo(response.getOrderStatus());
+        assertThat(response1.getDeliveryDate()).isEqualTo(response.getDeliveryDate());
+
+
+
+    }
+
+    @Test
     public void updateOrderStatus() {
+
     }
 
     @Test
