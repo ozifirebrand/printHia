@@ -85,8 +85,9 @@ public class OrderServicesImpl implements OrderServices {
         Optional<PrintOrder> optionalPrintOrder = orderRepository.findById(orderId);
         if ( optionalPrintOrder.isEmpty() ) throw new BusinessLogicException("There is no order with ID "+orderId+" here!");
         PrintOrder order = optionalPrintOrder.get();
-        order.setSize(request.getSize());
-        order.setQuantity(request.getQuantity());
+        if ( request.getSize() > 0 ) order.setSize(request.getSize());
+
+        if ( request.getQuantity() >0 )order.setQuantity(request.getQuantity());
 
         return Mapper.map(order);
     }
