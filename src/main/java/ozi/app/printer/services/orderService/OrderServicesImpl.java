@@ -78,9 +78,11 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public boolean deleteOrderByUserId(String userId) {
-        boolean isDeleted = orderRepository.deleteByUserId(userId);
-        return isDeleted;
+    public boolean deleteOrderByUserId(String userId){
+        List<PrintOrder> orders = orderRepository.findPrintOrderByUserId(userId);
+        if ( orders.isEmpty())return false;
+        orderRepository.deleteAll(orders);
+        return true;
     }
 
     @Override
