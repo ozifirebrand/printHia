@@ -317,6 +317,16 @@ class OrderServicesImplTest {
     }
 
     @Test
+    public void test_EmptyOrdersBy_Date_SendThereAreNoOrdersWithThisDate() throws OrderException {
+        //assert
+        orderServices.deleteAllOrders();
+        assertThatThrownBy(()->orderServices.getOrdersByDate(LocalDateTime.now()))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("There are no orders with this date "
+                        +LocalDateTime.now().truncatedTo(ChronoUnit.DAYS)+"!");
+    }
+
+    @Test
     public void getOrdersByStatus() throws BusinessLogicException {
         //given
         String userId = "myUserId";
@@ -351,6 +361,14 @@ class OrderServicesImplTest {
     }
 
     @Test
+    public void test_EmptyOrdersBy_Status_SendThereAreNoOrdersInThisStatus(){
+        //assert
+        assertThatThrownBy(()->orderServices.getOrdersByStatus(OrderStatus.DELIVERED))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("There are no orders in this state "+OrderStatus.DELIVERED);
+    }
+
+    @Test
     public void getOrdersByUserId() throws BusinessLogicException {
         //given
         String userId = "myUserId";
@@ -382,6 +400,18 @@ class OrderServicesImplTest {
         assertThat(ordersByUserId1.get(0).getId()).isEqualTo(response1.getId());
         assertThat(ordersByUserId1.get(0).getQuantity()).isEqualTo(response1.getQuantity());
         assertThat(ordersByUserId1.get(0).getSize()).isEqualTo(response1.getSize());
+    }
+
+    @Test
+    public void test_InvalidUserId_ThrowsBusinessException(){
+        //given
+        String invalidId = "anInvalidId";
+
+        //assert
+        assertThatThrownBy(()->orderServices.getOrdersByUserId(invalidId))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("This user, anInvalidId, does not have any orders!");
+
     }
 
     @Test
