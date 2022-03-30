@@ -12,7 +12,6 @@ import ozi.app.printer.data.dtos.requests.OrderUpdateRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
-import ozi.app.printer.data.models.Role;
 import ozi.app.printer.exceptions.BusinessLogicException;
 
 import java.time.LocalDateTime;
@@ -21,7 +20,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -314,8 +312,36 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void getOrdersByStatus() {
+    public void getOrdersByStatus() throws BusinessLogicException {
         //given
+        String userId = "myUserId";
+        orderCreationRequest.setUserId(userId);
+
+        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
+        orderCreationRequest1.setOrderDate(LocalDateTime.now());
+        orderCreationRequest1.setSize(1.0);
+        orderCreationRequest1.setQuantity(1);
+        orderCreationRequest1.setImageUrl("imaeurl.com");
+        orderCreationRequest1.setUserId("anId");
+
+        OrderCreationResponse response =orderServices.createOrder(orderCreationRequest);
+        OrderCreationResponse response1 =orderServices.createOrder(orderCreationRequest1);
+
+        OrderCreationResponse response2 =orderServices.updateOrderStatus(response.getId(), OrderStatus.PENDING);
+
+        //when
+        List<PrintOrder> ordersByStatus1 = orderServices.getOrdersByStatus(response1.getOrderStatus());
+        List<PrintOrder> ordersByStatus2 = orderServices.getOrdersByStatus(response2.getOrderStatus());
+
+        //assert
+        assertThat(ordersByStatus1.size()).isEqualTo(1);
+        assertThat(ordersByStatus1.get(0).getId()).isEqualTo(response1.getId());
+        assertThat(ordersByStatus1.get(0).getOrderStatus()).isEqualTo(response1.getOrderStatus());
+
+        assertThat(ordersByStatus2.get(0).getOrderStatus()).isEqualTo(response2.getOrderStatus());
+        assertThat(ordersByStatus2.get(0).getId()).isEqualTo(response.getId());
+        assertThat(response2.getId()).isEqualTo(response.getId());
+        assertThat(ordersByStatus2.size()).isEqualTo(1);
 
     }
 
