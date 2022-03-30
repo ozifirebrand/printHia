@@ -22,7 +22,7 @@ public interface OrderServices {
     OrderCreationResponse updateOrderDeliverDate(String orderId, LocalDateTime date) throws BusinessLogicException;
     OrderCreationResponse getOrderById(String id) throws OrderException;
     List<PrintOrder> getAllOrders() throws OrderException;
-    List<PrintOrder> getOrdersByDate(LocalDateTime dateTime);
-    List<PrintOrder> getOrdersByStatus(OrderStatus status);
-    List<PrintOrder> getOrdersByUserId(String userId);
+    List<PrintOrder> getOrdersByDate(LocalDateTime dateTime) throws BusinessLogicException;
+    List<PrintOrder> getOrdersByStatus(OrderStatus status) throws BusinessLogicException;
+    List<PrintOrder> getOrdersByUserId(String userId) throws OrderException;
 }

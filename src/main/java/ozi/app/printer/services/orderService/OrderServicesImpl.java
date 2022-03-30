@@ -136,22 +136,26 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     @Override
-    public List<PrintOrder> getOrdersByDate(LocalDateTime date) {
+    public List<PrintOrder> getOrdersByDate(LocalDateTime date) throws BusinessLogicException {
         LocalDateTime truncatedDate = date.truncatedTo(ChronoUnit.DAYS);
-        return orderRepository.findByOrderDate(truncatedDate);
+        List<PrintOrder> ordersByDate = orderRepository.findByOrderDate(truncatedDate);
+        if ( ordersByDate.isEmpty() ) throw new OrderException("There are no orders with this date "+truncatedDate+"!");
+        return ordersByDate;
     }
 
     @Override
-    public List<PrintOrder> getOrdersByStatus(OrderStatus status) {
-
-        return orderRepository.findByOrderStatus(status);
+    public List<PrintOrder> getOrdersByStatus(OrderStatus status) throws BusinessLogicException {
+        List<PrintOrder> ordersByStatus = orderRepository.findByOrderStatus(status);
+        if ( ordersByStatus.isEmpty() ) throw new OrderException("There are no orders in this state "+status);
+        return ordersByStatus;
     }
 
     @Override
-    public List<PrintOrder> getOrdersByUserId(String userId) {
-
-
-        return orderRepository.findPrintOrderByUserId(userId);
+    public List<PrintOrder> getOrdersByUserId(String userId) throws OrderException {
+        List<PrintOrder> ordersByUserId = orderRepository.findPrintOrderByUserId(userId);
+        if ( ordersByUserId.isEmpty() )
+            throw new OrderException("This user, "+userId+", does not have any orders!");
+        return ordersByUserId;
     }
 
     @Override
