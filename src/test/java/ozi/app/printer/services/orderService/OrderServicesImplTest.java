@@ -290,35 +290,33 @@ class OrderServicesImplTest {
         //given
         String userId = "myUserId";
         orderCreationRequest.setUserId(userId);
+        orderServices.deleteOrderByUserId(userId);
 
         OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
-        orderCreationRequest1.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
+        orderCreationRequest1.setOrderDate(LocalDateTime.now());
         orderCreationRequest1.setSize(1.0);
         orderCreationRequest1.setQuantity(1);
         orderCreationRequest1.setImageUrl("imaeurl.com");
         orderCreationRequest1.setUserId("anId");
 
-        OrderCreationResponse response1 =orderServices.createOrder(orderCreationRequest1);
         OrderCreationResponse response =orderServices.createOrder(orderCreationRequest);
-
+        OrderCreationResponse response1 =orderServices.createOrder(orderCreationRequest1);
 
         //when
         List<PrintOrder> orders = orderServices.getOrdersByDate(response.getOrderDate());
 
         //assert
-        assertThat(response.getId()).isEqualTo(orders.get(1).getId());
-        assertThat(response.getOrderDate()).isEqualTo(orders.get(1).getOrderDate());
-        assertThat(response.getDeliveryDate()).isEqualTo(orders.get(1).getDeliveryDate());
-        assertThat(response.getQuantity()).isEqualTo(orders.get(1).getQuantity());
-        assertThat(response1.getId()).isEqualTo(orders.get(0).getId());
-        assertThat(response1.getOrderDate()).isEqualTo(orders.get(0).getOrderDate());
-        assertThat(response1.getDeliveryDate()).isEqualTo(orders.get(0).getDeliveryDate());
-        assertThat(response1.getQuantity()).isEqualTo(orders.get(0).getQuantity());
+        assertThat(response.getId()).isEqualTo(orders.get(0).getId());
+        assertThat(response.getQuantity()).isEqualTo(orders.get(0).getQuantity());
+        assertThat(response1.getId()).isEqualTo(orders.get(1).getId());
+        assertThat(response1.getQuantity()).isEqualTo(orders.get(1).getQuantity());
 
     }
 
     @Test
     public void getOrdersByStatus() {
+        //given
+
     }
 
     @Test
