@@ -346,7 +346,37 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void getOrdersByUserId() {
+    public void getOrdersByUserId() throws BusinessLogicException {
+        //given
+        String userId = "myUserId";
+        orderCreationRequest.setUserId(userId);
+        orderServices.deleteOrderByUserId(userId);
+
+        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
+        orderCreationRequest1.setOrderDate(LocalDateTime.now());
+        orderCreationRequest1.setSize(1.0);
+        orderCreationRequest1.setQuantity(1);
+        orderCreationRequest1.setImageUrl("imaeurl.com");
+        orderCreationRequest1.setUserId("anId");
+        orderServices.deleteAllOrders();
+        OrderCreationResponse response =orderServices.createOrder(orderCreationRequest);
+        OrderCreationResponse response1 =orderServices.createOrder(orderCreationRequest1);
+
+        //when
+        List<PrintOrder> ordersByUserId = orderServices.getOrdersByUserId(userId);
+        List<PrintOrder> ordersByUserId1 = orderServices.getOrdersByUserId("anId");
+
+        //assert
+        assertThat(ordersByUserId.size()).isEqualTo(1);
+        assertThat(ordersByUserId.get(0).getId()).isEqualTo(response.getId());
+        assertThat(ordersByUserId.get(0).getQuantity()).isEqualTo(response.getQuantity());
+        assertThat(ordersByUserId.get(0).getSize()).isEqualTo(response.getSize());
+
+
+        assertThat(ordersByUserId1.size()).isEqualTo(1);
+        assertThat(ordersByUserId1.get(0).getId()).isEqualTo(response1.getId());
+        assertThat(ordersByUserId1.get(0).getQuantity()).isEqualTo(response1.getQuantity());
+        assertThat(ordersByUserId1.get(0).getSize()).isEqualTo(response1.getSize());
     }
 
     @Test
