@@ -13,6 +13,7 @@ import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.exceptions.BusinessLogicException;
+import ozi.app.printer.exceptions.OrderException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,6 +26,10 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @Slf4j
 class OrderServicesImplTest {
+
+    @Autowired
+    private OrderServices orderServices;
+
     @Mock
     private OrderServices mockOrderServices;
 
@@ -57,9 +62,6 @@ class OrderServicesImplTest {
         mockOrderServices.createOrder(orderCreationRequest);
         verify(mockOrderServices, times(1)).createOrder(orderCreationRequest);
     }
-
-    @Autowired
-    private OrderServices orderServices;
 
     @Test
     public void testIncompleteDetails_ThrowException(){
@@ -142,7 +144,8 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void if_updateDetailIsNullOrEmpty_DetailDoesNotChangeInDB() throws BusinessLogicException {
+    public void if_updateDetailIsNullOrEmpty_DetailDoesNotChangeInDB()
+            throws BusinessLogicException {
         //given
         OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
 
@@ -162,7 +165,8 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void test_if_updateDetailIsNullOrEmpty_DetailDoesNotChangeInDB() throws BusinessLogicException {
+    public void test_if_updateDetailIsNullOrEmpty_DetailDoesNotChangeInDB()
+            throws BusinessLogicException {
         //given
         OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
 
@@ -182,7 +186,8 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void test_AllUpdateDetailIsNullOrEmpty_DetailDoesNotChangeInDB() throws BusinessLogicException {
+    public void test_AllUpdateDetailIsNullOrEmpty_DetailDoesNotChangeInDB()
+            throws BusinessLogicException {
     //given
     OrderCreationResponse response = orderServices.createOrder(orderCreationRequest);
 
@@ -380,6 +385,44 @@ class OrderServicesImplTest {
     }
 
     @Test
-    public void getAllOrders() {
+    public void getAllOrders() throws BusinessLogicException {
+        //given
+        String userId = "myUserId";
+        orderCreationRequest.setUserId(userId);
+        orderServices.deleteOrderByUserId(userId);
+
+        OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
+        orderCreationRequest1.setOrderDate(LocalDateTime.now());
+        orderCreationRequest1.setSize(1.0);
+        orderCreationRequest1.setQuantity(1);
+        orderCreationRequest1.setImageUrl("imaeurl.com");
+        orderCreationRequest1.setUserId("anId");
+        orderServices.deleteAllOrders();
+
+
+        OrderCreationRequest orderCreationRequest2 = new OrderCreationRequest();
+        orderCreationRequest2.setOrderDate(LocalDateTime.now());
+        orderCreationRequest2.setSize(10);
+        orderCreationRequest2.setQuantity(100);
+        orderCreationRequest2.setImageUrl("myimageurleurl.com");
+        orderCreationRequest2.setUserId("anotherId");
+        OrderCreationResponse response =orderServices.createOrder(orderCreationRequest);
+        OrderCreationResponse response1 =orderServices.createOrder(orderCreationRequest1);
+        OrderCreationResponse response2 =orderServices.createOrder(orderCreationRequest2);
+
+        //when
+        List<PrintOrder> ordersList = orderServices.getAllOrders();
+
+        //assert
+        assertThat(ordersList.size()).isEqualTo(3);
+        assertThat(response.getQuantity()).isEqualTo(ordersList.get(0).getQuantity());
+        assertThat(response.getId()).isEqualTo(ordersList.get(0).getId());
+        assertThat(response.getId()).isEqualTo(ordersList.get(0).getId());
+        assertThat(response1.getQuantity()).isEqualTo(ordersList.get(1).getQuantity());
+        assertThat(response1.getId()).isEqualTo(ordersList.get(1).getId());
+        assertThat(response1.getId()).isEqualTo(ordersList.get(1).getId());
+        assertThat(response2.getQuantity()).isEqualTo(ordersList.get(2).getQuantity());
+        assertThat(response2.getId()).isEqualTo(ordersList.get(2).getId());
+        assertThat(response2.getId()).isEqualTo(ordersList.get(2).getId());
     }
 }
