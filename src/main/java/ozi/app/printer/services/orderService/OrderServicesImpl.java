@@ -1,6 +1,5 @@
 package ozi.app.printer.services.orderService;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class OrderServicesImpl implements OrderServices {
 
     @Autowired
