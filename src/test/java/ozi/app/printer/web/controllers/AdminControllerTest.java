@@ -1,5 +1,6 @@
 package ozi.app.printer.web.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,28 +24,44 @@ public class AdminControllerTest {
     @Autowired
     MockMvc mockMvc;
     private ObjectMapper objectMapper;
-
+    private OrderCreationRequest orderCreationRequest;
     @BeforeEach
     public void setUp(){
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-    }
 
-    @Test
-    public void test_createOrder() throws Exception{
-        //given
-        OrderCreationRequest orderCreationRequest = new OrderCreationRequest();
+        orderCreationRequest = new OrderCreationRequest();
         orderCreationRequest.setUserId("9403JHNAKSIAojIR");
         orderCreationRequest.setOrderDate(LocalDateTime.now());
         orderCreationRequest.setSize(12);
         orderCreationRequest.setQuantity(4);
         orderCreationRequest.setImageUrl("aurl");
+    }
 
-        //when
+    @Test
+    public void test_createOrder() throws Exception{
+        //given @ setup
+
+        //when then assert
         mockMvc.perform(post("/api/admin/print/order")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(orderCreationRequest)))
                 .andExpect(status().is(201))
                 .andDo(print());
     }
+
+    @Test
+    public void test_incompleteDetailsThrowsBusinessLogicException() throws Exception {
+        //given
+        orderCreationRequest.setImageUrl(null);
+
+        //when then assert
+        mockMvc.perform(post("/api/admin/print/order")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(orderCreationRequest)))
+                .andExpect(status().is(400))
+                .andDo(print());
+
+    }
+
 }
