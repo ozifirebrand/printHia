@@ -8,18 +8,28 @@
 
 
 </head>
-<div id="app">
-    <h1>{{hello}}</h1>
-</div>
+<!--<div id="app">-->
+<!--    <h1>{{hello}}</h1>-->
+<!--</div>-->
 <body>
     <script>
-        new Vue(
-            {
-                el:'#app',
-                data: {hello: 'Hello my world'}
-            }
-        )
+        import {createApp} from "vue";
+        createApp({
+
+        }).mount('#app')
     </script>
+
+    <div id="app">
+        <h1>Welcome to Printapp</h1>
+    </div>
+<!--    <script>-->
+<!--        new Vue(-->
+<!--            {-->
+<!--                el:'#app',-->
+<!--                data: {hello: 'Hello my world'}-->
+<!--            }-->
+<!--        )-->
+<!--    </script>-->
 </body>
 </html>
 
@@ -28,10 +38,4 @@
 <!--//    import { createApp } from 'vue'-->
 <!--//-->
 <!--//    createApp({-->
-<!--//        data(){-->
-<!--//            return {-->
-<!--//                message: "Hello my world!"-->
-<!--//            }-->
-<!--//        }-->
-<!--//        // component options-->
 <!--//    }).mount('#app')-->
