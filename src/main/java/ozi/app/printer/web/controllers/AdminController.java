@@ -3,17 +3,15 @@ package ozi.app.printer.web.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
-import ozi.app.printer.data.models.PrintOrder;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.services.adminService.AdminServices;
 import ozi.app.printer.services.orderService.OrderServices;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/api/admin/print")
 public class AdminController {
     @Autowired
@@ -41,16 +39,6 @@ public class AdminController {
         }
         catch (BusinessLogicException exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-        }
-    }
-
-    @GetMapping("/orders")
-    public ResponseEntity<?> getAllOrders(){
-        try {
-            List<PrintOrder> orderList = orderServices.getAllOrders();
-            return ResponseEntity.status(HttpStatus.OK).body(orderList);
-        }catch (BusinessLogicException businessLogicException){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(businessLogicException.getMessage());
         }
     }
 }
