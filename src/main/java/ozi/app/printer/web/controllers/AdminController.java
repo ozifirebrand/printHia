@@ -5,16 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ozi.app.printer.data.dtos.requests.AdminCreationRequest;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
-import ozi.app.printer.data.models.OrderStatus;
 import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.services.adminService.AdminServices;
 import ozi.app.printer.services.orderService.OrderServices;
-import ozi.app.printer.services.userService.UserServices;
-
-import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/api/admin/print")
@@ -33,6 +28,17 @@ public class AdminController {
         }
         catch (BusinessLogicException businessLogicException){
             return ResponseEntity.badRequest().body(businessLogicException.getMessage());
+        }
+    }
+
+    @GetMapping("/order/{id}")
+    public ResponseEntity<?> getOrderById(@PathVariable String id){
+        try {
+            OrderCreationResponse orderCreationResponse = orderServices.getOrderById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(orderCreationResponse);
+        }
+        catch (BusinessLogicException exception){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
     }
 }
