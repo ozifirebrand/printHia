@@ -10,9 +10,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
+import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
+import ozi.app.printer.services.orderService.OrderServices;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AdminControllerTest {
+
+    @Autowired
+    OrderServices orderServices;
 
     @Autowired
     MockMvc mockMvc;
@@ -59,6 +65,30 @@ public class AdminControllerTest {
         mockMvc.perform(post("/api/admin/print/order")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(orderCreationRequest)))
+                .andExpect(status().is(400))
+                .andDo(print());
+
+    }
+
+    @Test
+    public void test_getOrderById() throws Exception{
+
+        //give
+        OrderCreationResponse orderCreationResponse = orderServices.createOrder(orderCreationRequest);
+        String orderId = orderCreationResponse.getId();
+
+        //when then assert
+        mockMvc.perform(get("/api/admin/print/order/"+orderId)
+                .contentType("application/json"))
+                .andExpect(status().is(200))
+                .andDo(print());
+    }
+
+    @Test
+    public void test_wrongIdThrowsBusinessLogicException() throws Exception {
+        //when then assert
+        mockMvc.perform(get("/api/admin/print/order/uwtul593Ih9khh")
+                        .contentType("application/json"))
                 .andExpect(status().is(400))
                 .andDo(print());
 
