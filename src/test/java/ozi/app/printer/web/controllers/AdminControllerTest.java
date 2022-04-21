@@ -1,6 +1,5 @@
 package ozi.app.printer.web.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ozi.app.printer.data.dtos.requests.OrderCreationRequest;
 import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
 import ozi.app.printer.services.orderService.OrderServices;
-
-import java.time.LocalDateTime;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -38,7 +34,6 @@ public class AdminControllerTest {
 
         orderCreationRequest = new OrderCreationRequest();
         orderCreationRequest.setUserId("9403JHNAKSIAojIR");
-        orderCreationRequest.setOrderDate(LocalDateTime.now());
         orderCreationRequest.setSize(12);
         orderCreationRequest.setQuantity(4);
         orderCreationRequest.setImageUrl("aurl");

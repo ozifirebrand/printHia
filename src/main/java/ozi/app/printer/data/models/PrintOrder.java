@@ -1,5 +1,6 @@
 package ozi.app.printer.data.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,8 +24,10 @@ public class PrintOrder {
 
     private int quantity;
 
+    @JsonFormat(pattern = "yy/MM/dd")
     private LocalDateTime orderDate;
 
+    @JsonFormat(pattern = "yy/MM/dd")
     private LocalDateTime deliveryDate;
 
     private boolean ordered;

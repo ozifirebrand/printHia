@@ -1,14 +1,8 @@
 package ozi.app.printer.mapper;
 
 import ozi.app.printer.data.dtos.requests.*;
-import ozi.app.printer.data.dtos.responses.AdminCreationResponse;
-import ozi.app.printer.data.dtos.responses.OrderCreationResponse;
-import ozi.app.printer.data.dtos.responses.UserCreationResponse;
-import ozi.app.printer.data.models.PrintAdmin;
-import ozi.app.printer.data.models.PrintOrder;
-import ozi.app.printer.data.models.PrintUser;
-import ozi.app.printer.data.models.Role;
-
+import ozi.app.printer.data.dtos.responses.*;
+import ozi.app.printer.data.models.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -40,7 +34,6 @@ public class Mapper {
 
     public static PrintOrder map(OrderCreationRequest request){
         PrintOrder order = new PrintOrder();
-        order.setOrderDate(request.getOrderDate());
         order.setImageUrl(request.getImageUrl());
         order.setSize(request.getSize());
         order.setQuantity(request.getQuantity());
