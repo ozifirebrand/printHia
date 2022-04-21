@@ -1,8 +1,6 @@
 package ozi.app.printer.data.dtos.requests;
 
 import lombok.Data;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Data
 public class OrderCreationRequest {
@@ -12,8 +10,6 @@ public class OrderCreationRequest {
     private double size;
 
     private int quantity;
-
-    private LocalDateTime orderDate;
 
     private String userId;
 }
