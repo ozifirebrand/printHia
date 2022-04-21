@@ -34,26 +34,21 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     private void validate(OrderCreationRequest request) throws BusinessLogicException {
-        setDateFor(request);
-        boolean orderDateIsEmpty= request.getOrderDate() == null;
         boolean imageUrlIsEmpty= request.getImageUrl() == null;
         boolean sizeIsEmpty = request.getSize()==0;
         boolean quantityIsEmpty = request.getQuantity() == 0;
         boolean userIdIsEmpty = request.getUserId()==null;
 
-        if ( orderDateIsEmpty || imageUrlIsEmpty|| sizeIsEmpty|| quantityIsEmpty || userIdIsEmpty ){
+        if ( imageUrlIsEmpty|| sizeIsEmpty|| quantityIsEmpty || userIdIsEmpty ){
             throw new OrderException("The given details are incomplete");
         }
     }
 
     private void setOtherDetailsFor(PrintOrder order) {
+        order.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
         order.setOrdered(true);
         order.setOrderStatus(OrderStatus.ORDERED);
         order.setDeliveryDate(order.getOrderDate().plusDays(3) );
-    }
-
-    private void setDateFor(OrderCreationRequest request) {
-        request.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
     }
 
     private PrintOrder save(PrintOrder order) {

@@ -39,7 +39,6 @@ class OrderServicesImplTest {
     @BeforeEach
     void setUp() {
         orderCreationRequest = new OrderCreationRequest();
-        orderCreationRequest.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
         orderCreationRequest.setSize(14.0);
         orderCreationRequest.setQuantity(12);
         orderCreationRequest.setImageUrl("imageurl.com");
@@ -252,7 +251,6 @@ class OrderServicesImplTest {
     public void deleteAllOrders() throws BusinessLogicException {
         //given
         OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
-        orderCreationRequest1.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
         orderCreationRequest1.setSize(1.0);
         orderCreationRequest1.setQuantity(1);
         orderCreationRequest1.setImageUrl("imaeurl.com");
@@ -296,7 +294,6 @@ class OrderServicesImplTest {
         orderServices.deleteOrderByUserId(userId);
 
         OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
-        orderCreationRequest1.setOrderDate(LocalDateTime.now());
         orderCreationRequest1.setSize(1.0);
         orderCreationRequest1.setQuantity(1);
         orderCreationRequest1.setImageUrl("imaeurl.com");
@@ -333,7 +330,6 @@ class OrderServicesImplTest {
         orderCreationRequest.setUserId(userId);
 
         OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
-        orderCreationRequest1.setOrderDate(LocalDateTime.now());
         orderCreationRequest1.setSize(1.0);
         orderCreationRequest1.setQuantity(1);
         orderCreationRequest1.setImageUrl("imaeurl.com");
@@ -376,13 +372,14 @@ class OrderServicesImplTest {
         orderServices.deleteOrderByUserId(userId);
 
         OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
-        orderCreationRequest1.setOrderDate(LocalDateTime.now());
         orderCreationRequest1.setSize(1.0);
         orderCreationRequest1.setQuantity(1);
         orderCreationRequest1.setImageUrl("imaeurl.com");
         orderCreationRequest1.setUserId("anId");
         orderServices.deleteAllOrders();
         OrderCreationResponse response =orderServices.createOrder(orderCreationRequest);
+        System.out.println(response.getOrderDate());
+
         OrderCreationResponse response1 =orderServices.createOrder(orderCreationRequest1);
 
         //when
@@ -422,7 +419,6 @@ class OrderServicesImplTest {
         orderServices.deleteOrderByUserId(userId);
 
         OrderCreationRequest orderCreationRequest1 = new OrderCreationRequest();
-        orderCreationRequest1.setOrderDate(LocalDateTime.now());
         orderCreationRequest1.setSize(1.0);
         orderCreationRequest1.setQuantity(1);
         orderCreationRequest1.setImageUrl("imaeurl.com");
@@ -431,7 +427,6 @@ class OrderServicesImplTest {
 
 
         OrderCreationRequest orderCreationRequest2 = new OrderCreationRequest();
-        orderCreationRequest2.setOrderDate(LocalDateTime.now());
         orderCreationRequest2.setSize(10);
         orderCreationRequest2.setQuantity(100);
         orderCreationRequest2.setImageUrl("myimageurleurl.com");
