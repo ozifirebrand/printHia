@@ -44,10 +44,10 @@ public class UserServicesImpl implements UserServices {
     @Override
     public PrintUser getUserById(String userId) throws BusinessLogicException {
         Optional<PrintUser> optionalPrintUser = userRepository.findById(userId);
-        if ( optionalPrintUser.isEmpty() ){
-            throw new BusinessLogicException("This user does not exist!");
+        if ( optionalPrintUser.isPresent() ) {
+            return optionalPrintUser.get();
         }
-        return optionalPrintUser.get();
+        throw new BusinessLogicException("This user does not exist!");
     }
 
     @Override
@@ -67,7 +67,8 @@ public class UserServicesImpl implements UserServices {
     @Override
     public boolean deleteUserById(String userId) {
         userRepository.deleteById(userId);
-        return userRepository.findById(userId).isEmpty();
+        final boolean empty = userRepository.findById(userId).isEmpty();
+        return empty;
     }
 
     @Override
