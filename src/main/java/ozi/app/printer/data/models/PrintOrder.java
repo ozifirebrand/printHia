@@ -24,6 +24,8 @@ public class PrintOrder {
 
     private int quantity;
 
+    private double price;
+
     @JsonFormat(pattern = "yy/MM/dd")
     private LocalDateTime orderDate;
 
