@@ -9,7 +9,7 @@ import ozi.app.printer.data.dtos.requests.UserCreationRequest;
 import ozi.app.printer.services.userService.UserServices;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("api/user/print")
 public class UserController {
     @Autowired

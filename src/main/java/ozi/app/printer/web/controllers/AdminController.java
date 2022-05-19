@@ -11,7 +11,7 @@ import ozi.app.printer.exceptions.BusinessLogicException;
 import ozi.app.printer.services.adminService.AdminServices;
 import ozi.app.printer.services.orderService.OrderServices;
 
-@Controller
+@RestController
 @RequestMapping("/api/admin/print")
 public class AdminController {
     @Autowired
