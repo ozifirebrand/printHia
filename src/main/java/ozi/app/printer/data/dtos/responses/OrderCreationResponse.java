@@ -1,10 +1,12 @@
 package ozi.app.printer.data.dtos.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import ozi.app.printer.data.models.OrderStatus;
 import java.time.LocalDateTime;
-@Data
+@Getter
+@Setter
 public class OrderCreationResponse {
     private String id;
 
@@ -13,6 +15,8 @@ public class OrderCreationResponse {
     private double size;
 
     private int quantity;
+
+    private double price;
 
     @JsonFormat(pattern = "yy/MM/dd")
     private LocalDateTime orderDate;
