@@ -45,6 +45,7 @@ public class Mapper {
 
         OrderCreationResponse response = new OrderCreationResponse();
         response.setId(order.getId());
+        response.setPrice(order.getPrice());
         LocalDateTime truncatedTime = order.getOrderDate().truncatedTo(ChronoUnit.DAYS);
         response.setOrderDate(truncatedTime);
         response.setQuantity(order.getQuantity());
