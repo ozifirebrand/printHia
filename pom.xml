@@ -125,7 +125,7 @@
 						<archive>
 							<manifest>
 								<mainClass>
-									ozi.app.printer.PrinterApplication.executable.ExecutableMavenJar
+									ozi.app.printer.PrinterApplication
 								</mainClass>
 							</manifest>
 						</archive>
