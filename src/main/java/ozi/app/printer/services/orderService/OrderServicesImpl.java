@@ -45,6 +45,8 @@ public class OrderServicesImpl implements OrderServices {
     }
 
     private void setOtherDetailsFor(PrintOrder order) {
+        double price = order.getQuantity() * order.getSize();
+        order.setPrice(price);
         order.setOrderDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
         order.setOrdered(true);
         order.setOrderStatus(OrderStatus.ORDERED);
