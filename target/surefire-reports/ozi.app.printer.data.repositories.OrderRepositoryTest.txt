@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: ozi.app.printer.data.repositories.OrderRepositoryTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.189 s - in ozi.app.printer.data.repositories.OrderRepositoryTest

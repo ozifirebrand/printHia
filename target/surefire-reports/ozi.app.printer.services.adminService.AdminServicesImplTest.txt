@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: ozi.app.printer.services.adminService.AdminServicesImplTest
+-------------------------------------------------------------------------------
+Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.527 s - in ozi.app.printer.services.adminService.AdminServicesImplTest

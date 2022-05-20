@@ -1,0 +1,7 @@
+ozi\app\printer\data\repositories\AdminRepositoryTest.class
+ozi\app\printer\services\orderService\OrderServicesImplTest.class
+ozi\app\printer\PrinterApplicationTests.class
+ozi\app\printer\data\repositories\OrderRepositoryTest.class
+ozi\app\printer\services\userService\UserServicesImplTest.class
+ozi\app\printer\web\controllers\AdminControllerTest.class
+ozi\app\printer\services\adminService\AdminServicesImplTest.class
